@@ -466,3 +466,26 @@
 
 </body>
 </html>
+<script>
+  // Cole a sua URL do Apps Script aqui entre as aspas:
+  const API_URL = "https://script.google.com/macros/s/AKfycbwqpNz7mjouRnPIkPSgr1Po5Lqd1VcS3mccR61YvY4l4asXJ_OJNjqoxLKzBmLn7OXD/exec";
+
+  // Função para buscar os dados e atualizar a página
+  async function carregarDadosDoForms() {
+    try {
+      const resposta = await fetch(API_URL);
+      const dados = await resposta.json();
+      console.log("Dados recebidos da planilha:", dados);
+      
+      // Se você tiver um elemento na sua página com o ID 'contador', ele atualiza sozinho:
+      if(document.getElementById('contador')) {
+        document.getElementById('contador').innerText = dados.total || 0;
+      }
+    } catch (erro) {
+      console.error("Erro ao buscar dados:", erro);
+    }
+  }
+
+  // Executa assim que a página abre
+  carregarDadosDoForms();
+</script>
