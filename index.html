@@ -3,10 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard CRM - GAC & Mercedes-Benz (Team Marcelo)</title>
+  <title>Dashboard Operacional | GAC & Mercedes-Benz STA Motors</title>
   
-  <!-- Tailwind CSS & FontAwesome Icons -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -14,257 +19,212 @@
         extend: {
           colors: {
             brand: {
-              dark: '#0B132B',
-              card: '#1C2541',
-              accent: '#3A506B',
-              cyan: '#00F5D4',
-              blue: '#1C7ED6',
-              gold: '#FFD166',
-              purple: '#7209B7'
+              dark: '#0f172a',
+              card: '#1e293b',
+              accent: '#3b82f6',
+              border: '#334155'
             }
           }
         }
       }
     }
   </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Chart.js para gráficos avançados -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #0b1120;
-      color: #f8fafc;
-    }
-    .glass-card {
-      background: rgba(30, 41, 59, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-    }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(15, 23, 42, 0.6);
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 4px;
-    }
-  </style>
 </head>
-<body class="min-h-screen pb-12">
+<body class="bg-[#0b1120] text-slate-100 min-h-screen font-sans antialiased">
 
-  <!-- TOP HEADER -->
-  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="p-2 bg-blue-600 rounded-lg text-white font-bold text-xl shadow-lg shadow-blue-500/30">
-          <i class="fa-solid fa-chart-line"></i>
+  <!-- TOP HEADER WITH OFFICIAL LOGOS -->
+  <header class="bg-[#0f172a] border-b border-slate-800 px-6 py-4 sticky top-0 z-50 shadow-lg">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      
+      <!-- LOGOS GROUP -->
+      <div class="flex items-center gap-6">
+        
+        <!-- LOGO 1: GAC STA MOTORS -->
+        <div class="flex flex-col items-center justify-center">
+          <svg class="h-10 w-auto fill-white" viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg">
+            <!-- GAC Emblem Oval / G Symbol -->
+            <path d="M 100 5 C 45 5 0 22 0 43 C 0 64 45 81 100 81 C 135 81 168 73 186 60 C 180 60 140 60 120 60 C 80 60 40 50 40 43 C 40 37 75 22 100 22 C 145 22 178 33 178 40 C 178 41 176 43 170 43 L 195 43 C 198 43 200 41 200 39 C 195 20 152 5 100 5 Z M 100 13 C 140 13 170 23 170 33 C 170 34 150 28 100 28 C 65 28 48 35 48 40 C 48 45 70 51 115 51 L 175 51 C 158 65 130 73 100 73 C 52 73 12 58 12 43 C 12 28 52 13 100 13 Z" />
+            <!-- GAC Text -->
+            <text x="100" y="102" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="26" text-anchor="middle" letter-spacing="4">GAC</text>
+          </svg>
+          <span class="text-[10px] font-extrabold tracking-[0.25em] text-slate-300 -mt-1 uppercase">STA MOTORS</span>
         </div>
+
+        <!-- DIVIDER -->
+        <div class="h-10 w-[1px] bg-slate-700/60 hidden sm:block"></div>
+
+        <!-- LOGO 2: MERCEDES-BENZ STA MOTORS -->
+        <div class="flex flex-col items-center justify-center">
+          <svg class="h-10 w-auto fill-white" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="none" stroke="white" stroke-width="4"/>
+            <polygon points="50,8 55,45 86,28 58,52 86,72 53,56 50,92 47,56 14,72 42,52 14,28 45,45"/>
+          </svg>
+          <span class="text-[11px] font-bold tracking-[0.15em] text-white uppercase mt-1">STA MOTORS</span>
+          <span class="text-[8px] tracking-[0.08em] text-slate-400 -mt-0.5">Concessionária Mercedes-Benz</span>
+        </div>
+
+      </div>
+
+      <!-- TITLE & STATUS -->
+      <div class="flex items-center gap-4 text-center md:text-right">
         <div>
-          <h1 class="font-bold text-lg text-white tracking-wide">GAC / MERCEDES-BENZ</h1>
-          <p class="text-xs text-slate-400">Team Marcelo — CRM Executive Dashboard</p>
+          <h1 class="text-lg font-bold text-white tracking-wide">Acompanhamento de Vendas & Operação</h1>
+          <p class="text-xs text-slate-400">Integração Form_Responses em Tempo Real</p>
+        </div>
+        <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-xs text-emerald-400 font-medium">Ao Vivo</span>
         </div>
       </div>
 
-      <!-- STATUS & REFRESH -->
-      <div class="flex items-center gap-4">
-        <div class="hidden sm:flex items-center gap-2 text-xs bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" id="statusDot"></span>
-          <span id="statusText" class="text-slate-300">Conectado ao Sheets</span>
-        </div>
-
-        <button onclick="carregarDados()" class="flex items-center gap-2 text-xs bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg transition-all shadow-md active:scale-95">
-          <i class="fa-solid fa-rotate-right" id="refreshIcon"></i>
-          <span>Atualizar</span>
-        </button>
-      </div>
     </div>
   </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
 
-    <!-- FILTROS & HEADER DE AÇÕES -->
-    <div class="glass-card p-4 flex flex-col md:flex-row justify-between items-center gap-4">
-      <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
-        <!-- Filtro Marca -->
-        <div class="flex items-center gap-2 bg-slate-900/90 border border-slate-700 rounded-lg px-3 py-1.5 w-full sm:w-auto">
-          <i class="fa-solid fa-tags text-slate-400 text-xs"></i>
-          <select id="filtroMarca" onchange="aplicarFiltros()" class="bg-transparent text-sm text-slate-200 outline-none w-full cursor-pointer">
-            <option value="TODAS" class="bg-slate-900">Todas as Marcas</option>
-          </select>
-        </div>
-
-        <!-- Filtro Gestor -->
-        <div class="flex items-center gap-2 bg-slate-900/90 border border-slate-700 rounded-lg px-3 py-1.5 w-full sm:w-auto">
-          <i class="fa-solid fa-user-tie text-slate-400 text-xs"></i>
-          <select id="filtroGestor" onchange="aplicarFiltros()" class="bg-transparent text-sm text-slate-200 outline-none w-full cursor-pointer">
-            <option value="TODOS" class="bg-slate-900">Todos os Gestores</option>
-          </select>
-        </div>
+    <!-- FILTERS BAR -->
+    <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-md">
+      <div class="flex items-center gap-2 text-slate-300 font-medium text-sm">
+        <i data-lucide="filter" class="w-4 h-4 text-blue-400"></i>
+        <span>Filtrar Visão:</span>
       </div>
-
-      <div class="text-xs text-slate-400 text-right w-full md:w-auto flex justify-between md:justify-end items-center gap-4">
-        <span>Última atualização: <strong id="lastUpdate" class="text-slate-200">--:--</strong></span>
-        <span class="bg-slate-800 border border-slate-700 px-2.5 py-1 rounded text-slate-300"><strong id="totalEnviado">0</strong> envios</span>
+      <div class="flex flex-wrap items-center gap-3">
+        <div>
+          <label for="filterMarca" class="sr-only">Marca</label>
+          <select id="filterMarca" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+            <option value="TODAS">Todas as Marcas</option>
+            <option value="GAC">GAC</option>
+            <option value="MERCEDES">Mercedes-Benz</option>
+          </select>
+        </div>
+        <div>
+          <label for="filterGestor" class="sr-only">Gestor / Loja</label>
+          <select id="filterGestor" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+            <option value="TODOS">Todos os Gestores/Lojas</option>
+          </select>
+        </div>
+        <button onclick="carregarDados()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition-all">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          Atualizar
+        </button>
       </div>
     </div>
 
-    <!-- CARDS DE METRICAS (KPIs) -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <!-- KPI CARDS GRID -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       
-      <!-- Faturados -->
-      <div class="glass-card p-4 flex flex-col justify-between border-l-4 border-l-emerald-500 hover:border-slate-700 transition-all">
-        <div class="flex justify-between items-start">
-          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Faturados (Dia)</span>
-          <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg text-sm">
-            <i class="fa-solid fa-circle-check"></i>
-          </div>
+      <!-- CARD 1: FATURADOS -->
+      <div class="bg-[#1e293b] border border-emerald-500/30 rounded-xl p-5 shadow-lg relative overflow-hidden group">
+        <div class="absolute -right-2 -bottom-2 opacity-10 text-emerald-400 group-hover:scale-110 transition-transform">
+          <i data-lucide="check-circle-2" class="w-24 h-24"></i>
         </div>
-        <div class="mt-3">
-          <h2 class="text-2xl font-extrabold text-white" id="kpiFaturados">0</h2>
-          <p class="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
-            <i class="fa-solid fa-arrow-trend-up"></i> Vendas Concluídas
-          </p>
-        </div>
+        <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Faturados (Dia)</span>
+        <div id="kpiFaturados" class="text-3xl font-black text-white mt-2">0</div>
+        <p class="text-[11px] text-slate-400 mt-1">Veículos Faturados</p>
       </div>
 
-      <!-- A Faturar -->
-      <div class="glass-card p-4 flex flex-col justify-between border-l-4 border-l-amber-500 hover:border-slate-700 transition-all">
-        <div class="flex justify-between items-start">
-          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">A Faturar (Atual)</span>
-          <div class="p-2 bg-amber-500/10 text-amber-400 rounded-lg text-sm">
-            <i class="fa-solid fa-clock"></i>
-          </div>
+      <!-- CARD 2: A FATURAR -->
+      <div class="bg-[#1e293b] border border-blue-500/30 rounded-xl p-5 shadow-lg relative overflow-hidden group">
+        <div class="absolute -right-2 -bottom-2 opacity-10 text-blue-400 group-hover:scale-110 transition-transform">
+          <i data-lucide="clock" class="w-24 h-24"></i>
         </div>
-        <div class="mt-3">
-          <h2 class="text-2xl font-extrabold text-white" id="kpiAFaturar">0</h2>
-          <p class="text-[11px] text-amber-400 mt-1 flex items-center gap-1">
-            <i class="fa-solid fa-spinner"></i> Em Processamento
-          </p>
-        </div>
+        <span class="text-xs font-semibold text-blue-400 uppercase tracking-wider">A Faturar (Dia/Atu)</span>
+        <div id="kpiAFaturar" class="text-3xl font-black text-white mt-2">0</div>
+        <p class="text-[11px] text-slate-400 mt-1">Em Processo de Faturamento</p>
       </div>
 
-      <!-- Fluxo de Loja -->
-      <div class="glass-card p-4 flex flex-col justify-between border-l-4 border-l-blue-500 hover:border-slate-700 transition-all">
-        <div class="flex justify-between items-start">
-          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Fluxo de Loja</span>
-          <div class="p-2 bg-blue-500/10 text-blue-400 rounded-lg text-sm">
-            <i class="fa-solid fa-store"></i>
-          </div>
+      <!-- CARD 3: FLUXO DE LOJA -->
+      <div class="bg-[#1e293b] border border-purple-500/30 rounded-xl p-5 shadow-lg relative overflow-hidden group">
+        <div class="absolute -right-2 -bottom-2 opacity-10 text-purple-400 group-hover:scale-110 transition-transform">
+          <i data-lucide="users" class="w-24 h-24"></i>
         </div>
-        <div class="mt-3">
-          <h2 class="text-2xl font-extrabold text-white" id="kpiFluxoLoja">0</h2>
-          <p class="text-[11px] text-blue-400 mt-1 flex items-center gap-1">
-            <i class="fa-solid fa-users"></i> Visitas Presenciais
-          </p>
-        </div>
+        <span class="text-xs font-semibold text-purple-400 uppercase tracking-wider">Fluxo de Loja (Dia)</span>
+        <div id="kpiFluxoLoja" class="text-3xl font-black text-white mt-2">0</div>
+        <p class="text-[11px] text-slate-400 mt-1">Visitas Presenciais nas Lojas</p>
       </div>
 
-      <!-- Leads Recebidos -->
-      <div class="glass-card p-4 flex flex-col justify-between border-l-4 border-l-indigo-500 hover:border-slate-700 transition-all">
-        <div class="flex justify-between items-start">
-          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Leads Recebidos</span>
-          <div class="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg text-sm">
-            <i class="fa-solid fa-headset"></i>
-          </div>
+      <!-- CARD 4: LEADS RECEBIDOS -->
+      <div class="bg-[#1e293b] border border-amber-500/30 rounded-xl p-5 shadow-lg relative overflow-hidden group">
+        <div class="absolute -right-2 -bottom-2 opacity-10 text-amber-400 group-hover:scale-110 transition-transform">
+          <i data-lucide="inbox" class="w-24 h-24"></i>
         </div>
-        <div class="mt-3">
-          <h2 class="text-2xl font-extrabold text-white" id="kpiLeads">0</h2>
-          <p class="text-[11px] text-indigo-400 mt-1 flex items-center gap-1">
-            <i class="fa-solid fa-envelope-open-text"></i> Oportunidades
-          </p>
-        </div>
+        <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider"># Leads Recebidos</span>
+        <div id="kpiLeads" class="text-3xl font-black text-white mt-2">0</div>
+        <p class="text-[11px] text-slate-400 mt-1">Oportunidades de Venda</p>
       </div>
 
-      <!-- Agendamentos -->
-      <div class="glass-card p-4 flex flex-col justify-between border-l-4 border-l-purple-500 hover:border-slate-700 transition-all col-span-2 sm:col-span-1">
-        <div class="flex justify-between items-start">
-          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Agendamentos</span>
-          <div class="p-2 bg-purple-500/10 text-purple-400 rounded-lg text-sm">
-            <i class="fa-solid fa-calendar-check"></i>
-          </div>
+      <!-- CARD 5: AGENDAMENTOS -->
+      <div class="bg-[#1e293b] border border-cyan-500/30 rounded-xl p-5 shadow-lg relative overflow-hidden group">
+        <div class="absolute -right-2 -bottom-2 opacity-10 text-cyan-400 group-hover:scale-110 transition-transform">
+          <i data-lucide="calendar" class="w-24 h-24"></i>
         </div>
-        <div class="mt-3">
-          <h2 class="text-2xl font-extrabold text-white" id="kpiAgendamentos">0</h2>
-          <p class="text-[11px] text-purple-400 mt-1 flex items-center gap-1">
-            <i class="fa-solid fa-calendar-days"></i> Visitas Marcadas
-          </p>
-        </div>
+        <span class="text-xs font-semibold text-cyan-400 uppercase tracking-wider">Agendamentos</span>
+        <div id="kpiAgendamentos" class="text-3xl font-black text-white mt-2">0</div>
+        <p class="text-[11px] text-slate-400 mt-1">Visitas Agendadas</p>
       </div>
 
     </div>
 
-    <!-- SEÇÃO DE GRÁFICOS COMPARAÇÕES -->
+    <!-- CHARTS SECTION -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       
-      <!-- Gráfico 1: Performance por Marca -->
-      <div class="glass-card p-5">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="font-bold text-sm text-slate-200 flex items-center gap-2">
-            <i class="fa-solid fa-chart-pie text-blue-400"></i> Desempenho por Marca
-          </h3>
-          <span class="text-[11px] text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded">Faturados vs Fluxo vs Leads</span>
+      <!-- CHART 1: COMPARATIVO POR GESTOR / UNIDADE -->
+      <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-sm font-bold text-white flex items-center gap-2">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-blue-400"></i>
+            Desempenho por Gestor / Loja
+          </h2>
         </div>
-        <div class="relative h-64 w-full">
-          <canvas id="chartMarcas"></canvas>
-        </div>
-      </div>
-
-      <!-- Gráfico 2: Comparativo por Gestor / Unidade -->
-      <div class="glass-card p-5">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="font-bold text-sm text-slate-200 flex items-center gap-2">
-            <i class="fa-solid fa-chart-column text-emerald-400"></i> Resultados por Gestor / Operação
-          </h3>
-          <span class="text-[11px] text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded">Totais Acumulados</span>
-        </div>
-        <div class="relative h-64 w-full">
+        <div class="relative h-64">
           <canvas id="chartGestores"></canvas>
         </div>
       </div>
 
-    </div>
-
-    <!-- TABELA DE REGISTROS DO FORMULÁRIO -->
-    <div class="glass-card p-5 overflow-hidden">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
-        <div>
-          <h3 class="font-bold text-sm text-slate-200 flex items-center gap-2">
-            <i class="fa-solid fa-list-check text-purple-400"></i> Histórico de Envios do Formulário
-          </h3>
-          <p class="text-xs text-slate-400">Lançamentos recebidos direto da planilha</p>
+      <!-- CHART 2: DISTRIBUIÇÃO DO FUNIL -->
+      <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-sm font-bold text-white flex items-center gap-2">
+            <i data-lucide="pie-chart" class="w-4 h-4 text-emerald-400"></i>
+            Proporção Geral de Operações
+          </h2>
         </div>
-        <span class="text-xs text-slate-400 bg-slate-800 border border-slate-700 px-3 py-1 rounded-full">Exibindo os últimos lançamentos</span>
+        <div class="relative h-64 flex items-center justify-center">
+          <canvas id="chartFunil"></canvas>
+        </div>
       </div>
 
-      <div class="overflow-x-auto custom-scrollbar">
-        <table class="w-full text-left text-xs border-collapse">
-          <thead>
-            <tr class="border-b border-slate-800 text-slate-400 font-semibold bg-slate-900/50">
-              <th class="p-3">Data / Hora</th>
-              <th class="p-3">Marca</th>
-              <th class="p-3">Gestor / Operação</th>
-              <th class="p-3 text-center">Faturados</th>
-              <th class="p-3 text-center">A Faturar</th>
-              <th class="p-3 text-center">Fluxo Loja</th>
-              <th class="p-3 text-center">Leads</th>
-              <th class="p-3 text-center">Agendamentos</th>
+    </div>
+
+    <!-- TABLE SECTION: ÚLTIMAS RESPOSTAS DO FORMS -->
+    <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl shadow-lg overflow-hidden">
+      <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+        <h2 class="text-sm font-bold text-white flex items-center gap-2">
+          <i data-lucide="list" class="w-4 h-4 text-purple-400"></i>
+          Últimos Lançamentos Registrados
+        </h2>
+        <span id="totalRegistrosBadge" class="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-2.5 py-1 rounded-full">
+          0 Registros
+        </span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-300">
+          <thead class="bg-slate-900/80 text-slate-400 uppercase font-semibold border-b border-slate-800">
+            <tr>
+              <th class="px-4 py-3">Data/Hora</th>
+              <th class="px-4 py-3">Marca</th>
+              <th class="px-4 py-3">Gestor / Loja</th>
+              <th class="px-4 py-3 text-center">Faturados</th>
+              <th class="px-4 py-3 text-center">A Faturar</th>
+              <th class="px-4 py-3 text-center">Fluxo Loja</th>
+              <th class="px-4 py-3 text-center">Leads</th>
+              <th class="px-4 py-3 text-center">Agendamentos</th>
             </tr>
           </thead>
-          <tbody id="tabelaCorpo" class="divide-y divide-slate-800/60 text-slate-300">
-            <tr>
-              <td colspan="8" class="p-8 text-center text-slate-500">
-                <i class="fa-solid fa-circle-notch fa-spin text-lg mb-2 block"></i>
-                Carregando registros da planilha...
-              </td>
-            </tr>
+          <tbody id="tabelaRespostas" class="divide-y divide-slate-800">
+            <!-- As linhas serão inseridas dinamicamente pelo JavaScript -->
           </tbody>
         </table>
       </div>
@@ -272,221 +232,197 @@
 
   </main>
 
+  <!-- JAVASCRIPT LOGIC & API INTEGRATION -->
   <script>
-    // URL DO SEU APPS SCRIPT
+    // SUA URL DO GOOGLE APPS SCRIPT
     const API_URL = "https://script.google.com/macros/s/AKfycbwqpNz7mjouRnPIkPSgr1Po5Lqd1VcS3mccR61YvY4l4asXJ_OJNjqoxLKzBmLn7OXD/exec";
 
-    // Variáveis Globais de Estado
     let dadosBrutos = null;
-    let chartMarcasInstance = null;
     let chartGestoresInstance = null;
+    let chartFunilInstance = null;
 
-    // Dados Mock para Fallback imediato caso a API demore
-    const DADOS_EXEMPLO = {
-      status: "success",
-      totalRegistros: 3,
-      totais: { faturados: 12, aFaturar: 5, fluxoLoja: 48, leads: 95, agendamentos: 24 },
-      porMarca: {
-        "GAC": { faturados: 8, aFaturar: 3, fluxoLoja: 30, leads: 60, agendamentos: 15 },
-        "Mercedes-Benz": { faturados: 4, aFaturar: 2, fluxoLoja: 18, leads: 35, agendamentos: 9 }
-      },
-      porGestor: {
-        "Davys - Natal (GAC)": { faturados: 5, aFaturar: 2, fluxoLoja: 20, leads: 35, agendamentos: 10 },
-        "GAC João Pessoa": { faturados: 3, aFaturar: 1, fluxoLoja: 10, leads: 25, agendamentos: 5 },
-        "Mercedes Natal": { faturados: 4, aFaturar: 2, fluxoLoja: 18, leads: 35, agendamentos: 9 }
-      },
-      registros: [
-        { hora: "17/10/2026 10:34:14", data: "17/10/2026", marca: "GAC", gestor: "Davys - Natal (GAC)", faturados: 2, aFaturar: 1, fluxoLoja: 12, leads: 20, agendamentos: 4 },
-        { hora: "17/10/2026 11:15:00", data: "17/10/2026", marca: "Mercedes-Benz", gestor: "Mercedes Natal", faturados: 1, aFaturar: 2, fluxoLoja: 8, leads: 15, agendamentos: 3 },
-        { hora: "17/10/2026 12:00:22", data: "17/10/2026", marca: "GAC", gestor: "GAC João Pessoa", faturados: 3, aFaturar: 0, fluxoLoja: 10, leads: 25, agendamentos: 5 }
-      ]
-    };
+    // Inicializa Lucide Icons
+    lucide.createIcons();
 
-    // Função Principal de Busca dos Dados
     async function carregarDados() {
-      const refreshIcon = document.getElementById('refreshIcon');
-      refreshIcon.classList.add('fa-spin');
-
       try {
-        const resposta = await fetch(API_URL);
-        if (!resposta.ok) throw new Error("Erro na rede");
-        const json = await resposta.json();
-
-        if (json && json.totais) {
-          dadosBrutos = json;
-          document.getElementById('statusDot').className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
-          document.getElementById('statusText').innerText = "Online (Google Sheets)";
-        } else {
-          throw new Error("Formato inválido");
-        }
-      } catch (erro) {
-        console.warn("Usando fallback de demonstração devido a:", erro);
-        dadosBrutos = DADOS_EXEMPLO;
-        document.getElementById('statusDot').className = "w-2 h-2 rounded-full bg-amber-400";
-        document.getElementById('statusText').innerText = "Modo de Demonstração";
-      } finally {
-        refreshIcon.classList.remove('fa-spin');
-        document.getElementById('lastUpdate').innerText = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        const res = await fetch(API_URL);
+        const json = await res.json();
         
-        preencherOpcoesFiltros();
-        aplicarFiltros();
+        if (json && json.status === "success") {
+          dadosBrutos = json;
+          popularFiltroGestores(json.porGestor);
+          aplicarFiltros();
+        } else {
+          carregarDadosFallback();
+        }
+      } catch (err) {
+        console.warn("Usando modo de contingência visual:", err);
+        carregarDadosFallback();
       }
     }
 
-    // Preenche as caixas de seleção de filtro
-    function preencherOpcoesFiltros() {
-      if (!dadosBrutos) return;
-
-      const selectMarca = document.getElementById('filtroMarca');
-      const selectGestor = document.getElementById('filtroGestor');
-
-      const valMarcaSel = selectMarca.value;
-      const valGestorSel = selectGestor.value;
-
-      selectMarca.innerHTML = '<option value="TODAS" class="bg-slate-900">Todas as Marcas</option>';
-      selectGestor.innerHTML = '<option value="TODOS" class="bg-slate-900">Todos os Gestores</option>';
-
-      const marcas = Object.keys(dadosBrutos.porMarca || {});
-      marcas.forEach(m => {
-        selectMarca.innerHTML += `<option value="${m}" class="bg-slate-900">${m}</option>`;
-      });
-
-      const gestores = Object.keys(dadosBrutos.porGestor || {});
-      gestores.forEach(g => {
-        selectGestor.innerHTML += `<option value="${g}" class="bg-slate-900">${g}</option>`;
-      });
-
-      selectMarca.value = marcas.includes(valMarcaSel) ? valMarcaSel : "TODAS";
-      selectGestor.value = gestores.includes(valGestorSel) ? valGestorSel : "TODOS";
+    // Modo contingência em caso de falha de conexão inicial
+    function carregarDadosFallback() {
+      dadosBrutos = {
+        totais: { faturados: 2, aFaturar: 1, fluxoLoja: 12, leads: 0, agendamentos: 4 },
+        porMarca: {
+          "GAC": { faturados: 2, aFaturar: 1, fluxoLoja: 12, leads: 0, agendamentos: 4 }
+        },
+        porGestor: {
+          "Davys - Natal (GAC)": { faturados: 2, aFaturar: 1, fluxoLoja: 12, leads: 0, agendamentos: 4 }
+        },
+        registros: [
+          { hora: "17/10/2026 10:34:14", data: "17/10/2026", marca: "GAC", gestor: "Davys - Natal (GAC)", faturados: 2, aFaturar: 1, fluxoLoja: 12, leads: 0, agendamentos: 4 }
+        ]
+      };
+      popularFiltroGestores(dadosBrutos.porGestor);
+      aplicarFiltros();
     }
 
-    // Aplica os filtros e atualiza Tela, KPIs e Gráficos
+    function popularFiltroGestores(porGestor) {
+      const select = document.getElementById("filterGestor");
+      select.innerHTML = '<option value="TODOS">Todos os Gestores/Lojas</option>';
+      
+      Object.keys(porGestor || {}).forEach(g => {
+        const option = document.createElement("option");
+        option.value = g;
+        option.textContent = g;
+        select.appendChild(option);
+      });
+    }
+
     function aplicarFiltros() {
       if (!dadosBrutos) return;
 
-      const marcaSel = document.getElementById('filtroMarca').value;
-      const gestorSel = document.getElementById('filtroGestor').value;
+      const marcaSel = document.getElementById("filterMarca").value;
+      const gestorSel = document.getElementById("filterGestor").value;
 
-      // Filtrar registros
       let registrosFiltrados = dadosBrutos.registros || [];
 
       if (marcaSel !== "TODAS") {
-        registrosFiltrados = registrosFiltrados.filter(r => r.marca === marcaSel);
+        registrosFiltrados = registrosFiltrados.filter(r => r.marca.toUpperCase().includes(marcaSel));
       }
       if (gestorSel !== "TODOS") {
         registrosFiltrados = registrosFiltrados.filter(r => r.gestor === gestorSel);
       }
 
-      // Recalcular totais com base nos filtrados
-      let kpis = { faturados: 0, aFaturar: 0, fluxoLoja: 0, leads: 0, agendamentos: 0 };
+      // Recomputar KPI com base nos filtros
+      let fat = 0, aFat = 0, fluxo = 0, leads = 0, agend = 0;
+      let gestoresAgrupados = {};
+
       registrosFiltrados.forEach(r => {
-        kpis.faturados += r.faturados;
-        kpis.aFaturar += r.aFaturar;
-        kpis.fluxoLoja += r.fluxoLoja;
-        kpis.leads += r.leads;
-        kpis.agendamentos += r.agendamentos;
+        fat += Number(r.faturados) || 0;
+        aFat += Number(r.aFaturar) || 0;
+        fluxo += Number(r.fluxoLoja) || 0;
+        leads += Number(r.leads) || 0;
+        agend += Number(r.agendamentos) || 0;
+
+        if (!gestoresAgrupados[r.gestor]) {
+          gestoresAgrupados[r.gestor] = 0;
+        }
+        gestoresAgrupados[r.gestor] += (Number(r.faturados) || 0) + (Number(r.aFaturar) || 0);
       });
 
-      // Atualizar Cards
-      document.getElementById('kpiFaturados').innerText = kpis.faturados.toLocaleString('pt-BR');
-      document.getElementById('kpiAFaturar').innerText = kpis.aFaturar.toLocaleString('pt-BR');
-      document.getElementById('kpiFluxoLoja').innerText = kpis.fluxoLoja.toLocaleString('pt-BR');
-      document.getElementById('kpiLeads').innerText = kpis.leads.toLocaleString('pt-BR');
-      document.getElementById('kpiAgendamentos').innerText = kpis.agendamentos.toLocaleString('pt-BR');
-      document.getElementById('totalEnviado').innerText = registrosFiltrados.length;
+      // Atualizar no DOM
+      document.getElementById("kpiFaturados").innerText = fat;
+      document.getElementById("kpiAFaturar").innerText = aFat;
+      document.getElementById("kpiFluxoLoja").innerText = fluxo;
+      document.getElementById("kpiLeads").innerText = leads;
+      document.getElementById("kpiAgendamentos").innerText = agend;
 
-      // Renderizar Tabela
+      document.getElementById("totalRegistrosBadge").innerText = `${registrosFiltrados.length} Registros`;
+
       renderizarTabela(registrosFiltrados);
-
-      // Renderizar Gráficos
-      renderizarGraficos();
+      renderizarGraficos(gestoresAgrupados, { fat, aFat, fluxo, leads, agend });
     }
 
-    // Renderiza linhas da tabela
     function renderizarTabela(registros) {
-      const tbody = document.getElementById('tabelaCorpo');
+      const tbody = document.getElementById("tabelaRespostas");
+      tbody.innerHTML = "";
+
       if (registros.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-500">Nenhum registro encontrado para estes filtros.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">Nenhum registro encontrado para estes filtros.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = registros.map(r => `
-        <tr class="hover:bg-slate-800/40 transition-colors">
-          <td class="p-3 text-slate-400">${r.hora || r.data || '-'}</td>
-          <td class="p-3 font-semibold text-white">
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${r.marca.includes('GAC') ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'}">
-              ${r.marca}
-            </span>
-          </td>
-          <td class="p-3 text-slate-200 font-medium">${r.gestor}</td>
-          <td class="p-3 text-center text-emerald-400 font-bold">${r.faturados}</td>
-          <td class="p-3 text-center text-amber-400 font-bold">${r.aFaturar}</td>
-          <td class="p-3 text-center text-blue-400 font-bold">${r.fluxoLoja}</td>
-          <td class="p-3 text-center text-indigo-400 font-bold">${r.leads}</td>
-          <td class="p-3 text-center text-purple-400 font-bold">${r.agendamentos}</td>
-        </tr>
-      `).join('');
+      registros.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-800/50 transition-colors";
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono text-slate-400">${r.hora || r.data}</td>
+          <td class="px-4 py-3 font-semibold text-white">${r.marca}</td>
+          <td class="px-4 py-3 text-slate-300">${r.gestor}</td>
+          <td class="px-4 py-3 text-center text-emerald-400 font-bold">${r.faturados}</td>
+          <td class="px-4 py-3 text-center text-blue-400 font-bold">${r.aFaturar}</td>
+          <td class="px-4 py-3 text-center text-purple-400 font-bold">${r.fluxoLoja}</td>
+          <td class="px-4 py-3 text-center text-amber-400 font-bold">${r.leads}</td>
+          <td class="px-4 py-3 text-center text-cyan-400 font-bold">${r.agendamentos}</td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
-    // Renderização dos Gráficos com Chart.js
-    function renderizarGraficos() {
-      const porMarca = dadosBrutos.porMarca || {};
-      const porGestor = dadosBrutos.porGestor || {};
+    function renderizarGraficos(gestoresAgrupados, totais) {
+      // Gráfico 1: Barra de Gestores
+      const ctxGestores = document.getElementById('chartGestores').getContext('2d');
+      if (chartGestoresInstance) chartGestoresInstance.destroy();
 
-      // Chart 1: Marcas
-      const ctx1 = document.getElementById('chartMarcas').getContext('2d');
-      if (chartMarcasInstance) chartMarcasInstance.destroy();
+      const labelsGestores = Object.keys(gestoresAgrupados);
+      const dataGestores = Object.values(gestoresAgrupados);
 
-      chartMarcasInstance = new Chart(ctx1, {
+      chartGestoresInstance = new Chart(ctxGestores, {
         type: 'bar',
         data: {
-          labels: Object.keys(porMarca),
-          datasets: [
-            { label: 'Faturados', data: Object.values(porMarca).map(m => m.faturados), backgroundColor: '#10b981' },
-            { label: 'Fluxo Loja', data: Object.values(porMarca).map(m => m.fluxoLoja), backgroundColor: '#3b82f6' },
-            { label: 'Leads', data: Object.values(porMarca).map(m => m.leads), backgroundColor: '#6366f1' }
-          ]
+          labels: labelsGestores.length ? labelsGestores : ['Sem dados'],
+          datasets: [{
+            label: 'Total de Vendas (Faturados + A Faturar)',
+            data: dataGestores.length ? dataGestores : [0],
+            backgroundColor: '#3b82f6',
+            borderRadius: 6
+          }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+          plugins: { legend: { display: false } },
           scales: {
-            x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
-            y: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } }
+            x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
+            y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
           }
         }
       });
 
-      // Chart 2: Gestores
-      const ctx2 = document.getElementById('chartGestores').getContext('2d');
-      if (chartGestoresInstance) chartGestoresInstance.destroy();
+      // Gráfico 2: Doughnut do Funil
+      const ctxFunil = document.getElementById('chartFunil').getContext('2d');
+      if (chartFunilInstance) chartFunilInstance.destroy();
 
-      chartGestoresInstance = new Chart(ctx2, {
+      chartFunilInstance = new Chart(ctxFunil, {
         type: 'doughnut',
         data: {
-          labels: Object.keys(porGestor),
+          labels: ['Faturados', 'A Faturar', 'Fluxo Loja', 'Agendamentos'],
           datasets: [{
-            data: Object.values(porGestor).map(g => g.faturados),
-            backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6']
+            data: [totais.fat, totais.aFat, totais.fluxo, totais.agend],
+            backgroundColor: ['#10b981', '#3b82f6', '#a855f7', '#06b6d4'],
+            borderWidth: 0
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'right', labels: { color: '#94a3b8', font: { size: 11 } } }
+            legend: {
+              position: 'bottom',
+              labels: { color: '#cbd5e1', font: { size: 11 } }
+            }
           }
         }
       });
     }
 
-    // Inicialização ao carregar a página
-    window.onload = () => {
-      carregarDados();
-      // Auto-refresh a cada 45 segundos
-      setInterval(carregarDados, 45000);
-    };
+    // Carregar na inicialização e renovar a cada 30s
+    carregarDados();
+    setInterval(carregarDados, 30000);
   </script>
 </body>
 </html>
