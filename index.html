@@ -38,7 +38,7 @@
         </div>
         <div>
           <h1 class="text-lg font-bold text-white tracking-wide">STA Motors — Painel Executivo de Vendas & Metas</h1>
-          <p class="text-xs text-slate-400">Visão Showroom (Gerentes) & Operação CRM/BDC</p>
+          <p class="text-xs text-slate-400">Visão Showroom (Gerentes) & Operação CRM/BDC (Khelton)</p>
         </div>
       </div>
       <div class="flex items-center gap-3">
@@ -127,7 +127,7 @@
       </div>
     </div>
 
-    <!-- SEÇÃO EXCLUSIVA: OPERAÇÃO CRM / BDC -->
+    <!-- SEÇÃO EXCLUSIVA: OPERAÇÃO CRM / BDC (KHELTON) -->
     <div id="blocoBdc" class="bg-[#1e293b] border border-cyan-500/40 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
@@ -136,7 +136,6 @@
         <span class="text-xs bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full border border-cyan-500/30 font-medium">Tempo Real (Forms CRM)</span>
       </div>
 
-      <!-- MACRO CARDS CRM -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-4">
           <span class="text-xs font-semibold text-cyan-400 uppercase">Total Leads (Tráfego)</span>
@@ -152,7 +151,6 @@
         </div>
       </div>
 
-      <!-- VISÃO MICRO POR LOJA (CRM) -->
       <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800 mb-6">
         <h3 class="text-xs font-bold text-cyan-300 uppercase tracking-wider mb-3 flex items-center gap-2">
           <i data-lucide="map-pin" class="w-4 h-4"></i> Detalhamento Micro por Loja (Operação CRM)
@@ -160,7 +158,6 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="bdcMicroContainer"></div>
       </div>
 
-      <!-- GRÁFICOS MICRO CRM POR LOJA -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
           <h3 class="text-sm font-bold text-white mb-2">Leads de Tráfego vs Repassados por Loja</h3>
@@ -172,7 +169,6 @@
         </div>
       </div>
 
-      <!-- HISTÓRICO DE REGISTROS CRM -->
       <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800">
         <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Histórico de Registros do CRM</h3>
         <div class="overflow-x-auto">
@@ -290,7 +286,7 @@
   </footer>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzBZO50JpS9wl-0UdHR0bXJX0_NLH3PeZvVOGnMJDka59BKwXsjuO6EA4KBipymyqD/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyTQ1Z3h_DMK_Apx5M5RY7YJRGCoGAQVBAiotfLbLcSv2pH-Vl7c-U6nWd15lo1dXZw/exec";
 
     let dadosBrutos = null;
     let chartGestoresInstance = null;
@@ -381,9 +377,6 @@
 
       if (dadosBrutos.porGestor) {
         Object.keys(dadosBrutos.porGestor).forEach(g => {
-          const gUpper = g.trim().toUpperCase();
-          if (gUpper === "" || gUpper === "NATAL") return; 
-
           if (!gestoresAgrupados[g]) {
             gestoresAgrupados[g] = { faturados: 0, aFaturar: 0, fluxo: 0 };
           }
@@ -404,7 +397,7 @@
       document.getElementById("kpiFluxoLoja").innerText = fluxo;
       document.getElementById("totalRegistrosBadge").innerText = `${registrosFiltrados.length} Registros`;
 
-      // Atualiza CRM / BDC
+      // Atualiza Operação CRM / BDC de forma totalmente isolada
       const bdcData = dadosBrutos.bdcConsolidado || { totalLeads: 0, totalAgendamentos: 0, porLoja: {} };
       document.getElementById("kpiBdcLeads").innerText = bdcData.totalLeads;
       document.getElementById("kpiBdcAgend").innerText = bdcData.totalAgendamentos;
