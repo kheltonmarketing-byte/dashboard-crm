@@ -19,9 +19,7 @@
       darkMode: 'class',
       theme: {
         extend: {
-          colors: {
-            brand: { dark: '#0b1120', card: '#1e293b', accent: '#3b82f6', border: '#334155' }
-          }
+          colors: { brand: { dark: '#0b1120', card: '#1e293b', accent: '#3b82f6', border: '#334155' } }
         }
       }
     }
@@ -68,7 +66,6 @@
       </div>
       <div class="flex flex-wrap items-center gap-3">
         <div>
-          <label for="filterData" class="sr-only">Data</label>
           <input type="date" id="filterData" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 outline-none">
         </div>
         <div>
@@ -95,7 +92,7 @@
     <div id="blocoMetas" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="target" class="w-5 h-5 text-blue-400"></i> Atingimento de Metas (Com Indicador de Cor Dinâmico)
+          <i data-lucide="target" class="w-5 h-5 text-blue-400"></i> Atingimento de Metas por Marca e Gestor
         </h2>
         <button onclick="imprimirBloco('blocoMetas')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
           <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir
@@ -103,16 +100,10 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <!-- GAC -->
         <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-xs font-bold text-blue-400 uppercase">GAC Motors</span>
-            <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">Meta: 220</span>
-          </div>
+          <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-blue-400 uppercase">GAC Motors</span><span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">Meta: 220</span></div>
           <div class="text-xl font-black text-white mb-2" id="gacMetaVal">0 / 220</div>
-          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3">
-            <div id="gacMetaBar" class="h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
-          </div>
+          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3"><div id="gacMetaBar" class="h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div></div>
           <div class="space-y-1 text-[11px] text-slate-300">
             <div class="flex justify-between"><span>Davys (Natal):</span> <strong id="gacNatalVal">0/60</strong></div>
             <div class="flex justify-between"><span>Willen (Maceió):</span> <strong id="gacMaceioVal">0/60</strong></div>
@@ -121,47 +112,29 @@
           </div>
         </div>
 
-        <!-- MERCEDES -->
         <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-xs font-bold text-emerald-400 uppercase">Mercedes-Benz</span>
-            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full">Meta: 16</span>
-          </div>
+          <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-emerald-400 uppercase">Mercedes-Benz</span><span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full">Meta: 16</span></div>
           <div class="text-xl font-black text-white mb-2" id="mbMetaVal">0 / 16</div>
-          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3">
-            <div id="mbMetaBar" class="h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
-          </div>
+          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3"><div id="mbMetaBar" class="h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div></div>
           <div class="space-y-1 text-[11px] text-slate-300">
             <div class="flex justify-between"><span>Renata (Natal):</span> <strong id="mbNatalVal">0/8</strong></div>
             <div class="flex justify-between"><span>Anielly (Maceió):</span> <strong id="mbMaceioVal">0/8</strong></div>
           </div>
         </div>
 
-        <!-- STA SELECT -->
         <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-xs font-bold text-purple-400 uppercase">STA Select</span>
-            <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">Meta: 20</span>
-          </div>
+          <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-purple-400 uppercase">STA Select</span><span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">Meta: 20</span></div>
           <div class="text-xl font-black text-white mb-2" id="selectMetaVal">0 / 20</div>
-          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3">
-            <div id="selectMetaBar" class="h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
-          </div>
+          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3"><div id="selectMetaBar" class="h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div></div>
           <div class="space-y-1 text-[11px] text-slate-300">
             <div class="flex justify-between"><span>Marcio (Maceió):</span> <strong id="selectMarcioVal">0/20</strong></div>
           </div>
         </div>
 
-        <!-- BDC -->
         <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-xs font-bold text-cyan-400 uppercase">BDC & Digital</span>
-            <span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full">Khelton</span>
-          </div>
+          <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-cyan-400 uppercase">BDC & Digital</span><span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full">Khelton</span></div>
           <div class="text-xl font-black text-white mb-2">Operação Ativa</div>
-          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3">
-            <div class="bg-cyan-500 h-2.5 rounded-full" style="width: 100%"></div>
-          </div>
+          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3"><div class="bg-cyan-500 h-2.5 rounded-full" style="width: 100%"></div></div>
           <div class="space-y-1 text-[11px] text-slate-300">
             <div class="flex justify-between"><span>Leads Gerenciados:</span> <strong id="kheltonLeadsVal">0</strong></div>
             <div class="flex justify-between"><span>Agendamentos BDC:</span> <strong id="kheltonAgendVal">0</strong></div>
@@ -170,80 +143,51 @@
       </div>
     </div>
 
-    <!-- PROJEÇÃO DE VENDAS -->
-    <div id="blocoProjecao" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-700 pb-4 mb-4 gap-2">
-        <h2 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="trending-up" class="w-5 h-5 text-amber-400"></i> Projeção de Faturamento (Run Rate)
-        </h2>
-        <div class="flex items-center gap-3">
-          <span class="text-xs text-amber-300 font-mono bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-lg">
-            Ritmo: <span id="ritmoDiarioVal" class="font-bold">0.0</span> carros/dia
-          </span>
-          <button onclick="imprimirBloco('blocoProjecao')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
-            <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir
-          </button>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-          <span class="text-xs text-slate-300 font-semibold block mb-1">GAC Motors (Meta: 220)</span>
-          <div class="text-2xl font-black text-amber-400 mb-2" id="projGacTotal">0 veículos</div>
-          <div class="text-[11px] text-slate-400 mb-1 flex justify-between"><span>Ritmo</span><span id="projGacPct" class="font-bold text-amber-400">0%</span></div>
-          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800"><div id="projGacBar" class="bg-amber-500 h-2.5 rounded-full" style="width: 0%"></div></div>
-        </div>
-        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-          <span class="text-xs text-slate-300 font-semibold block mb-1">Mercedes-Benz (Meta: 16)</span>
-          <div class="text-2xl font-black text-emerald-400 mb-2" id="projMbTotal">0 veículos</div>
-          <div class="text-[11px] text-slate-400 mb-1 flex justify-between"><span>Ritmo</span><span id="projMbPct" class="font-bold text-emerald-400">0%</span></div>
-          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800"><div id="projMbBar" class="bg-emerald-500 h-2.5 rounded-full" style="width: 0%"></div></div>
-        </div>
-        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-          <span class="text-xs text-slate-300 font-semibold block mb-1">STA Select - Marcio (Meta: 20)</span>
-          <div class="text-2xl font-black text-purple-400 mb-2" id="projSelectTotal">0 veículos</div>
-          <div class="text-[11px] text-slate-400 mb-1 flex justify-between"><span>Ritmo</span><span id="projSelectPct" class="font-bold text-purple-400">0%</span></div>
-          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800"><div id="projSelectBar" class="bg-purple-500 h-2.5 rounded-full" style="width: 0%"></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- INDICADORES OPERACIONAIS -->
+    <!-- INDICADORES OPERACIONAIS DE DIRETORIA (COM VISAO MICRO POR GESTOR) -->
     <div id="blocoKpis" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="bar-chart-3" class="w-5 h-5 text-cyan-400"></i> Indicadores Operacionais de Diretoria
+          <i data-lucide="bar-chart-3" class="w-5 h-5 text-cyan-400"></i> Indicadores Operacionais — Visão Micro por Gestor & Consolidado
         </h2>
         <button onclick="imprimirBloco('blocoKpis')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
           <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir
         </button>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div class="bg-slate-900/80 border border-emerald-500/30 rounded-xl p-4">
-          <span class="text-xs font-semibold text-emerald-400 uppercase">Faturados (Dia)</span>
+      <!-- CARDS CONSOLIDADOS GERAIS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+        <div class="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-4">
+          <span class="text-xs font-semibold text-emerald-400 uppercase">Faturados (Dia - Total)</span>
           <div id="kpiFaturados" class="text-3xl font-black text-white mt-2">0</div>
           <p class="text-[11px] text-slate-400 mt-1">Carros Faturados</p>
         </div>
-        <div class="bg-slate-900/80 border border-blue-500/30 rounded-xl p-4">
-          <span class="text-xs font-semibold text-blue-400 uppercase">A Faturar</span>
+        <div class="bg-slate-900/90 border border-blue-500/30 rounded-xl p-4">
+          <span class="text-xs font-semibold text-blue-400 uppercase">A Faturar (Total)</span>
           <div id="kpiAFaturar" class="text-3xl font-black text-white mt-2">0</div>
           <p class="text-[11px] text-slate-400 mt-1">Em Processo</p>
         </div>
-        <div class="bg-slate-900/80 border border-purple-500/30 rounded-xl p-4">
-          <span class="text-xs font-semibold text-purple-400 uppercase">Fluxo de Loja</span>
+        <div class="bg-slate-900/90 border border-purple-500/30 rounded-xl p-4">
+          <span class="text-xs font-semibold text-purple-400 uppercase">Fluxo Loja (Total)</span>
           <div id="kpiFluxoLoja" class="text-3xl font-black text-white mt-2">0</div>
           <p class="text-[11px] text-slate-400 mt-1">Atendimentos Salão</p>
         </div>
-        <div class="bg-slate-900/80 border border-amber-500/30 rounded-xl p-4">
+        <div class="bg-slate-900/90 border border-amber-500/30 rounded-xl p-4">
           <span class="text-xs font-semibold text-amber-400 uppercase">Leads (Khelton BDC)</span>
           <div id="kpiLeads" class="text-3xl font-black text-white mt-2">0</div>
           <p class="text-[11px] text-slate-400 mt-1">Oportunidades Digital</p>
         </div>
-        <div class="bg-slate-900/80 border border-cyan-500/30 rounded-xl p-4">
-          <span class="text-xs font-semibold text-cyan-400 uppercase">Agendamentos</span>
+        <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-4">
+          <span class="text-xs font-semibold text-cyan-400 uppercase">Agendamentos (Total)</span>
           <div id="kpiAgendamentos" class="text-3xl font-black text-white mt-2">0</div>
           <p class="text-[11px] text-slate-400 mt-1">Agendados BDC</p>
+        </div>
+      </div>
+
+      <!-- DETALHAMENTO MICRO POR CADA GESTOR (TABELA / CARDS INTERNOS) -->
+      <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800">
+        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Detalhamento Unificado por Gestor</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="microGestoresContainer">
+          <!-- Preenchido dinamicamente via JS -->
         </div>
       </div>
     </div>
@@ -330,7 +274,6 @@
       try {
         const res = await fetch(API_URL);
         const json = await res.json();
-        
         if (json && json.status === "success") {
           dadosBrutos = json;
           popularFiltroGestores(json.porGestor);
@@ -339,7 +282,6 @@
           carregarDadosFallback();
         }
       } catch (err) {
-        console.warn("Modo contingência visual:", err);
         carregarDadosFallback();
       }
     }
@@ -404,7 +346,6 @@
       let fat = 0, aFat = 0, fluxo = 0, leads = 0, agend = 0;
       let gestoresAgrupados = {};
 
-      // Garantir que todos os gestores apareçam na visão micro mesmo com zero filtrado
       const listaGestoresPadrao = [
         "Davys - Natal (GAC)", "Willen - Maceió (GAC)", "Higor - João Pessoa (GAC)", 
         "Renata - Natal (Mercedes-Benz)", "Anielly - Maceió (Mercedes-Benz)", 
@@ -438,15 +379,36 @@
       document.getElementById("kpiAgendamentos").innerText = agend;
       document.getElementById("totalRegistrosBadge").innerText = `${registrosFiltrados.length} Registros`;
 
+      renderizarCardsMicroGestores(gestoresAgrupados);
       atualizarMetasEProjecao(dadosBrutos.porGestor || {}, dadosBrutos.diasComRegistro || 1, leads, agend);
       renderizarTabela(registrosFiltrados);
       renderizarGraficos(gestoresAgrupados, { fat, aFat, fluxo, leads, agend });
     }
 
-    // Função auxiliar para cor dinâmica da barra de progresso (Vermelho/Ámbar -> Azul -> Verde)
-    function obterCorDinamicaMeta(percentual) {
-      if (percentual < 35) return 'bg-amber-500';
-      if (percentual < 75) return 'bg-blue-500';
+    function renderizarCardsMicroGestores(gestoresAgrupados) {
+      const container = document.getElementById("microGestoresContainer");
+      container.innerHTML = "";
+
+      Object.keys(gestoresAgrupados).forEach(g => {
+        const d = gestoresAgrupados[g];
+        const card = document.createElement("div");
+        card.className = "bg-slate-900 border border-slate-800 p-3 rounded-lg";
+        card.innerHTML = `
+          <div class="text-xs font-bold text-white mb-2 truncate" title="${g}">${g}</div>
+          <div class="grid grid-cols-4 gap-1 text-center text-[10px]">
+            <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400 block">Fat.</span><strong class="text-emerald-400 text-xs">${d.faturados}</strong></div>
+            <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400 block">A Fat.</span><strong class="text-blue-400 text-xs">${d.aFaturar}</strong></div>
+            <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400 block">Fluxo</span><strong class="text-purple-400 text-xs">${d.fluxo}</strong></div>
+            <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400 block">Agend.</span><strong class="text-cyan-400 text-xs">${d.agendamentos}</strong></div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function obterCorDinamicaMeta(p) {
+      if (p < 35) return 'bg-amber-500';
+      if (p < 75) return 'bg-blue-500';
       return 'bg-emerald-500';
     }
 
@@ -475,7 +437,6 @@
       const totalMb = mbNatal + mbMaceio;
       const totalSelect = selectMarcio;
 
-      // GAC
       document.getElementById("gacMetaVal").innerText = `${totalGac} / 220`;
       const pctGac = Math.min(100, Math.round((totalGac / 220) * 100));
       const barGac = document.getElementById("gacMetaBar");
@@ -486,7 +447,6 @@
       document.getElementById("gacJpVal").innerText = `${gacJp}/60`;
       document.getElementById("gacCgVal").innerText = `${gacCg}/40`;
 
-      // MERCEDES
       document.getElementById("mbMetaVal").innerText = `${totalMb} / 16`;
       const pctMb = Math.min(100, Math.round((totalMb / 16) * 100));
       const barMb = document.getElementById("mbMetaBar");
@@ -495,7 +455,6 @@
       document.getElementById("mbNatalVal").innerText = `${mbNatal}/8`;
       document.getElementById("mbMaceioVal").innerText = `${mbMaceio}/8`;
 
-      // STA SELECT
       document.getElementById("selectMetaVal").innerText = `${totalSelect} / 20`;
       const pctSelect = Math.min(100, Math.round((totalSelect / 20) * 100));
       const barSelect = document.getElementById("selectMetaBar");
@@ -530,12 +489,10 @@
     function renderizarTabela(registros) {
       const tbody = document.getElementById("tabelaRespostas");
       tbody.innerHTML = "";
-
       if (registros.length === 0) {
         tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">Nenhum registro encontrado.</td></tr>`;
         return;
       }
-
       registros.forEach(r => {
         const tr = document.createElement("tr");
         tr.className = "hover:bg-slate-800/50 transition-colors";
@@ -554,11 +511,9 @@
     }
 
     function renderizarGraficos(gestoresAgrupados, totais) {
-      // Labels limpos com os primeiros nomes dos gestores para a visão micro clara
       const labelsCompletos = Object.keys(gestoresAgrupados);
       const labelsCurtos = labelsCompletos.map(g => g.split(" - ")[0]);
 
-      // 1. CONVERSÃO MICRO POR GESTOR
       const ctxConversao = document.getElementById('chartConversao').getContext('2d');
       if (chartConversaoInstance) chartConversaoInstance.destroy();
       chartConversaoInstance = new Chart(ctxConversao, {
@@ -582,7 +537,6 @@
         }
       });
 
-      // 2. BDC MICRO POR GESTOR
       const ctxBdc = document.getElementById('chartBdc').getContext('2d');
       if (chartBdcInstance) chartBdcInstance.destroy();
       chartBdcInstance = new Chart(ctxBdc, {
@@ -601,7 +555,6 @@
         }
       });
 
-      // 3. FATURADOS MICRO POR GESTOR
       const ctxGestores = document.getElementById('chartGestores').getContext('2d');
       if (chartGestoresInstance) chartGestoresInstance.destroy();
       chartGestoresInstance = new Chart(ctxGestores, {
@@ -621,7 +574,6 @@
         }
       });
 
-      // 4. FUNIL CONSOLIDADO
       const ctxFunil = document.getElementById('chartFunil').getContext('2d');
       if (chartFunilInstance) chartFunilInstance.destroy();
       chartFunilInstance = new Chart(ctxFunil, {
