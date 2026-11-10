@@ -303,13 +303,9 @@
           "Anielly - Maceió (Mercedes-Benz)": { faturados: 2, aFaturar: 1, fluxoLoja: 10, marca: "Mercedes-Benz" },
           "Marcio - Maceió (STA Select)": { faturados: 2, aFaturar: 1, fluxoLoja: 5, marca: "STA Select" }
         },
-        registros: [
-          { hora: "2026-11-09 10:30", marca: "GAC", gestor: "Davys - Natal (GAC)", faturados: 4, aFaturar: 15, fluxoLoja: 5 }
-        ],
-        bdcRegistros: [
-          { data: "2026-11-09 15:21", loja: "NATAL", agendamentos: 0, leadsTrf: 20, repassados: 7, pctRepasse: "35.0%" }
-        ],
-        bdcConsolidado: { totalLeads: 20, totalAgendamentos: 0 }
+        registros: [],
+        bdcRegistros: [],
+        bdcConsolidado: { totalLeads: 0, totalAgendamentos: 0 }
       };
       popularFiltroGestores(dadosBrutos.porGestor);
       aplicarFiltros();
@@ -334,6 +330,12 @@
       const gestorSel = document.getElementById("filterGestor").value;
 
       let registrosFiltrados = dadosBrutos.registros || [];
+
+      // Filtra registros indesejados onde o gestor veio como "NATAL" isolado ou vazio
+      registrosFiltrados = registrosFiltrados.filter(r => {
+        const gName = (r.gestor || "").trim().toUpperCase();
+        return gName !== "" && gName !== "NATAL";
+      });
 
       if (dataSel) {
         registrosFiltrados = registrosFiltrados.filter(r => {
@@ -361,6 +363,9 @@
 
       if (dadosBrutos.porGestor) {
         Object.keys(dadosBrutos.porGestor).forEach(g => {
+          const gUpper = g.trim().toUpperCase();
+          if (gUpper === "" || gUpper === "NATAL") return; // Ignora lixo de "NATAL" isolado nos gestores de showroom
+
           if (!gestoresAgrupados[g]) {
             gestoresAgrupados[g] = { faturados: 0, aFaturar: 0, fluxo: 0 };
           }
