@@ -5,11 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Executivo | GAC & Mercedes-Benz STA Motors</title>
   
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <script>
@@ -41,7 +38,7 @@
         </div>
         <div>
           <h1 class="text-lg font-bold text-white tracking-wide">STA Motors — Painel Executivo de Vendas & Metas</h1>
-          <p class="text-xs text-slate-400">Visão Micro por Gestor e Consolidado Geral da Operação</p>
+          <p class="text-xs text-slate-400">Visão Showroom (Gerentes) & Operação BDC (Khelton)</p>
         </div>
       </div>
       <div class="flex items-center gap-3">
@@ -68,16 +65,15 @@
         </div>
         <div>
           <select id="filterMarca" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 outline-none">
-            <option value="TODAS">Todas as Marcas (GAC + Mercedes + Select + BDC)</option>
+            <option value="TODAS">Todas as Marcas (Showroom)</option>
             <option value="GAC">GAC Motors</option>
             <option value="MERCEDES">Mercedes-Benz</option>
             <option value="STA SELECT">STA Select (Seminovos)</option>
-            <option value="BDC">BDC / Operações (Khelton)</option>
           </select>
         </div>
         <div>
           <select id="filterGestor" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 outline-none">
-            <option value="TODOS">Todos os Gestores/Lojas</option>
+            <option value="TODOS">Todos os Gestores</option>
           </select>
         </div>
         <button onclick="carregarDados()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition-all shadow">
@@ -97,7 +93,7 @@
         </button>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
           <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-blue-400 uppercase">GAC Motors</span><span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">Meta: 220</span></div>
           <div class="text-xl font-black text-white mb-2" id="gacMetaVal">0 / 220</div>
@@ -128,64 +124,90 @@
             <div class="flex justify-between"><span>Marcio (Maceió):</span> <strong id="selectMarcioVal">0/20</strong></div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-          <div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-cyan-400 uppercase">BDC & Digital</span><span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full">Khelton</span></div>
-          <div class="text-xl font-black text-white mb-2">Operação Ativa</div>
-          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3"><div class="bg-cyan-500 h-2.5 rounded-full" style="width: 100%"></div></div>
-          <div class="space-y-1 text-[11px] text-slate-300">
-            <div class="flex justify-between"><span>Leads Gerenciados:</span> <strong id="kheltonLeadsVal">0</strong></div>
-            <div class="flex justify-between"><span>Agendamentos BDC:</span> <strong id="kheltonAgendVal">0</strong></div>
-          </div>
+    <!-- SEÇÃO EXCLUSIVA: BDC & TRÁFEGO (KHELTON) -->
+    <div id="blocoBdc" class="bg-[#1e293b] border border-cyan-500/40 rounded-xl p-6 shadow-lg relative print-block">
+      <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
+        <h2 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="headphones" class="w-5 h-5 text-cyan-400"></i> Operação BDC & Tráfego Digital (Gestão: Khelton)
+        </h2>
+        <span class="text-xs bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full border border-cyan-500/30 font-medium">Tempo Real (Forms BDC)</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-4">
+          <span class="text-xs font-semibold text-cyan-400 uppercase">Total Leads (Tráfego)</span>
+          <div id="kpiBdcLeads" class="text-3xl font-black text-white mt-2">0</div>
+        </div>
+        <div class="bg-slate-900/90 border border-blue-500/30 rounded-xl p-4">
+          <span class="text-xs font-semibold text-blue-400 uppercase">Total Agendamentos BDC</span>
+          <div id="kpiBdcAgend" class="text-3xl font-black text-white mt-2">0</div>
+        </div>
+        <div class="bg-slate-900/90 border border-purple-500/30 rounded-xl p-4">
+          <span class="text-xs font-semibold text-purple-400 uppercase">Eficiência Geral Repasse</span>
+          <div id="kpiBdcEficiencia" class="text-3xl font-black text-white mt-2">0%</div>
+        </div>
+      </div>
+
+      <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800">
+        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Histórico de Registros do BDC</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-900 text-slate-400 uppercase font-semibold border-b border-slate-800">
+              <tr>
+                <th class="px-4 py-2">Data/Hora</th>
+                <th class="px-4 py-2">Loja / Unidade</th>
+                <th class="px-4 py-2 text-center">Agendamentos</th>
+                <th class="px-4 py-2 text-center">Leads Tráfego</th>
+                <th class="px-4 py-2 text-center">Repassados</th>
+                <th class="px-4 py-2 text-center">% Repasse</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaBdcRespostas" class="divide-y divide-slate-800"></tbody>
+          </table>
         </div>
       </div>
     </div>
 
-    <!-- INDICADORES OPERACIONAIS -->
+    <!-- INDICADORES OPERACIONAIS SHOWROOM -->
     <div id="blocoKpis" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="bar-chart-3" class="w-5 h-5 text-cyan-400"></i> Indicadores Operacionais — Visão Micro por Gestor & Consolidado
+          <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-400"></i> Indicadores Showroom — Visão Micro por Gestor
         </h2>
         <button onclick="imprimirBloco('blocoKpis')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
           <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir
         </button>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div class="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-4">
-          <span class="text-xs font-semibold text-emerald-400 uppercase">Faturados (Total)</span>
+          <span class="text-xs font-semibold text-emerald-400 uppercase">Faturados (Showroom)</span>
           <div id="kpiFaturados" class="text-3xl font-black text-white mt-2">0</div>
         </div>
         <div class="bg-slate-900/90 border border-blue-500/30 rounded-xl p-4">
-          <span class="text-xs font-semibold text-blue-400 uppercase">A Faturar (Total)</span>
+          <span class="text-xs font-semibold text-blue-400 uppercase">A Faturar (Showroom)</span>
           <div id="kpiAFaturar" class="text-3xl font-black text-white mt-2">0</div>
         </div>
         <div class="bg-slate-900/90 border border-purple-500/30 rounded-xl p-4">
-          <span class="text-xs font-semibold text-purple-400 uppercase">Fluxo Loja (Total)</span>
+          <span class="text-xs font-semibold text-purple-400 uppercase">Fluxo Loja (Showroom)</span>
           <div id="kpiFluxoLoja" class="text-3xl font-black text-white mt-2">0</div>
-        </div>
-        <div class="bg-slate-900/90 border border-amber-500/30 rounded-xl p-4">
-          <span class="text-xs font-semibold text-amber-400 uppercase">Leads (Khelton)</span>
-          <div id="kpiLeads" class="text-3xl font-black text-white mt-2">0</div>
-        </div>
-        <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-4">
-          <span class="text-xs font-semibold text-cyan-400 uppercase">Agendamentos</span>
-          <div id="kpiAgendamentos" class="text-3xl font-black text-white mt-2">0</div>
         </div>
       </div>
 
       <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800">
-        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Detalhamento Unificado por Gestor</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="microGestoresContainer"></div>
+        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Detalhamento por Gestor de Showroom</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="microGestoresContainer"></div>
       </div>
     </div>
 
-    <!-- GRÁFICOS MICRO POR GESTOR -->
+    <!-- GRÁFICOS ANALÍTICOS SHOWROOM -->
     <div id="blocoGraficos" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-6">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="pie-chart" class="w-5 h-5 text-purple-400"></i> Gráficos Analíticos com Visão Micro por Gestor
+          <i data-lucide="pie-chart" class="w-5 h-5 text-purple-400"></i> Gráficos Analíticos — Showroom
         </h2>
         <button onclick="imprimirBloco('blocoGraficos')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
           <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir
@@ -198,25 +220,17 @@
           <div class="relative h-64"><canvas id="chartConversao"></canvas></div>
         </div>
         <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
-          <h3 class="text-sm font-bold text-white mb-2">Eficácia BDC e Agendamentos por Gestor</h3>
-          <div class="relative h-64"><canvas id="chartBdc"></canvas></div>
-        </div>
-        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
           <h3 class="text-sm font-bold text-white mb-2">Volume de Faturados Micro (Por Gestor)</h3>
           <div class="relative h-64"><canvas id="chartGestores"></canvas></div>
-        </div>
-        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
-          <h3 class="text-sm font-bold text-white mb-2">Proporção Consolidada da Operação</h3>
-          <div class="relative h-64 flex items-center justify-center"><canvas id="chartFunil"></canvas></div>
         </div>
       </div>
     </div>
 
-    <!-- TABELA -->
+    <!-- TABELA SHOWROOM -->
     <div id="blocoTabela" class="bg-[#1e293b] border border-slate-700/60 rounded-xl shadow-lg overflow-hidden print-block">
       <div class="p-5 border-b border-slate-800 flex items-center justify-between">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="list" class="w-4 h-4 text-purple-400"></i> Histórico Consolidado e por Gestor
+          <i data-lucide="list" class="w-4 h-4 text-purple-400"></i> Histórico de Vendas (Showroom)
         </h2>
         <div class="flex items-center gap-3">
           <span id="totalRegistrosBadge" class="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-2.5 py-1 rounded-full">0 Registros</span>
@@ -236,8 +250,6 @@
               <th class="px-4 py-3 text-center">Faturados</th>
               <th class="px-4 py-3 text-center">A Faturar</th>
               <th class="px-4 py-3 text-center">Fluxo Loja</th>
-              <th class="px-4 py-3 text-center">Leads (Khelton)</th>
-              <th class="px-4 py-3 text-center">Agendamentos</th>
             </tr>
           </thead>
           <tbody id="tabelaRespostas" class="divide-y divide-slate-800"></tbody>
@@ -256,13 +268,11 @@
   </footer>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxnGWB0_R-1SUXCsRsvf_r9WHJQAeCB81bghuK9nfikoEYMwj0KGuJXtKwPjx0BrYdo/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxm63Qtz5jgPjfVmDoQgPcIkjTzhL5IHnWwvNIY7hrB4j2mZ5di3vLsVv3R-NVAH2b0/exec";
 
     let dadosBrutos = null;
     let chartGestoresInstance = null;
-    let chartFunilInstance = null;
     let chartConversaoInstance = null;
-    let chartBdcInstance = null;
 
     lucide.createIcons();
 
@@ -285,22 +295,21 @@
     function carregarDadosFallback() {
       dadosBrutos = {
         diasComRegistro: 15,
-        totais: { faturados: 37, aFaturar: 19, fluxoLoja: 145, leads: 102, agendamentos: 45 },
         porGestor: {
-          "Davys - Natal (GAC)": { faturados: 12, aFaturar: 5, fluxoLoja: 45, leads: 30, agendamentos: 15, marca: "GAC" },
-          "Willen - Maceió (GAC)": { faturados: 10, aFaturar: 4, fluxoLoja: 38, leads: 25, agendamentos: 12, marca: "GAC" },
-          "Higor - João Pessoa (GAC)": { faturados: 9, aFaturar: 6, fluxoLoja: 35, leads: 22, agendamentos: 10, marca: "GAC" },
-          "Renata - Natal (Mercedes-Benz)": { faturados: 2, aFaturar: 2, fluxoLoja: 12, leads: 10, agendamentos: 3, marca: "Mercedes-Benz" },
-          "Anielly - Maceió (Mercedes-Benz)": { faturados: 2, aFaturar: 1, fluxoLoja: 10, leads: 8, agendamentos: 2, marca: "Mercedes-Benz" },
-          "Marcio - Maceió (STA Select)": { faturados: 2, aFaturar: 1, fluxoLoja: 5, leads: 7, agendamentos: 3, marca: "STA Select" },
-          "Khelton - BDC & Digital": { faturados: 0, aFaturar: 0, fluxoLoja: 0, leads: 102, agendamentos: 45, marca: "BDC" }
+          "Davys - Natal (GAC)": { faturados: 12, aFaturar: 5, fluxoLoja: 45, marca: "GAC" },
+          "Willen - Maceió (GAC)": { faturados: 10, aFaturar: 4, fluxoLoja: 38, marca: "GAC" },
+          "Higor - João Pessoa (GAC)": { faturados: 9, aFaturar: 6, fluxoLoja: 35, marca: "GAC" },
+          "Renata - Natal (Mercedes-Benz)": { faturados: 2, aFaturar: 2, fluxoLoja: 12, marca: "Mercedes-Benz" },
+          "Anielly - Maceió (Mercedes-Benz)": { faturados: 2, aFaturar: 1, fluxoLoja: 10, marca: "Mercedes-Benz" },
+          "Marcio - Maceió (STA Select)": { faturados: 2, aFaturar: 1, fluxoLoja: 5, marca: "STA Select" }
         },
         registros: [
-          { hora: "2026-11-08 10:30", data: "2026-11-08", marca: "GAC", gestor: "Davys - Natal (GAC)", faturados: 2, aFaturar: 1, fluxoLoja: 8, leads: 5, agendamentos: 3 },
-          { hora: "2026-11-08 09:15", data: "2026-11-08", marca: "Mercedes-Benz", gestor: "Anielly - Maceió (Mercedes-Benz)", faturados: 1, aFaturar: 0, fluxoLoja: 3, leads: 2, agendamentos: 1 },
-          { hora: "2026-11-08 08:45", data: "2026-11-08", marca: "STA Select", gestor: "Marcio - Maceió (STA Select)", faturados: 1, aFaturar: 0, fluxoLoja: 2, leads: 3, agendamentos: 1 },
-          { hora: "2026-11-08 08:00", data: "2026-11-08", marca: "BDC", gestor: "Khelton - BDC & Digital", faturados: 0, aFaturar: 0, fluxoLoja: 0, leads: 15, agendamentos: 6 }
-        ]
+          { hora: "2026-11-09 10:30", marca: "GAC", gestor: "Davys - Natal (GAC)", faturados: 4, aFaturar: 15, fluxoLoja: 5 }
+        ],
+        bdcRegistros: [
+          { data: "2026-11-09 15:21", loja: "NATAL", agendamentos: 0, leadsTrf: 20, repassados: 7, pctRepasse: "35.0%" }
+        ],
+        bdcConsolidado: { totalLeads: 20, totalAgendamentos: 0 }
       };
       popularFiltroGestores(dadosBrutos.porGestor);
       aplicarFiltros();
@@ -308,7 +317,7 @@
 
     function popularFiltroGestores(porGestor) {
       const select = document.getElementById("filterGestor");
-      select.innerHTML = '<option value="TODOS">Todos os Gestores/Lojas</option>';
+      select.innerHTML = '<option value="TODOS">Todos os Gestores</option>';
       Object.keys(porGestor || {}).forEach(g => {
         const option = document.createElement("option");
         option.value = g;
@@ -329,7 +338,7 @@
       if (dataSel) {
         registrosFiltrados = registrosFiltrados.filter(r => {
           const dataReg = (r.hora || r.data || "").split(" ")[0];
-          return dataReg === dataSel || (r.data && r.data === dataSel);
+          return dataReg === dataSel;
         });
       }
       if (marcaSel !== "TODAS") {
@@ -339,28 +348,25 @@
         registrosFiltrados = registrosFiltrados.filter(r => r.gestor === gestorSel);
       }
 
-      let fat = 0, aFat = 0, fluxo = 0, leads = 0, agend = 0;
+      let fat = 0, aFat = 0, fluxo = 0;
       let gestoresAgrupados = {};
 
       const listaGestoresPadrao = [
         "Davys - Natal (GAC)", "Willen - Maceió (GAC)", "Higor - João Pessoa (GAC)", 
-        "Renata - Natal (Mercedes-Benz)", "Anielly - Maceió (Mercedes-Benz)", 
-        "Marcio - Maceió (STA Select)", "Khelton - BDC & Digital"
+        "Renata - Natal (Mercedes-Benz)", "Anielly - Maceió (Mercedes-Benz)", "Marcio - Maceió (STA Select)"
       ];
       listaGestoresPadrao.forEach(g => {
-        gestoresAgrupados[g] = { faturados: 0, aFaturar: 0, fluxo: 0, leads: 0, agendamentos: 0 };
+        gestoresAgrupados[g] = { faturados: 0, aFaturar: 0, fluxo: 0 };
       });
 
       if (dadosBrutos.porGestor) {
         Object.keys(dadosBrutos.porGestor).forEach(g => {
           if (!gestoresAgrupados[g]) {
-            gestoresAgrupados[g] = { faturados: 0, aFaturar: 0, fluxo: 0, leads: 0, agendamentos: 0 };
+            gestoresAgrupados[g] = { faturados: 0, aFaturar: 0, fluxo: 0 };
           }
           gestoresAgrupados[g].faturados += Number(dadosBrutos.porGestor[g].faturados) || 0;
           gestoresAgrupados[g].aFaturar += Number(dadosBrutos.porGestor[g].aFaturar) || 0;
           gestoresAgrupados[g].fluxo += Number(dadosBrutos.porGestor[g].fluxoLoja) || 0;
-          gestoresAgrupados[g].leads += Number(dadosBrutos.porGestor[g].leads) || 0;
-          gestoresAgrupados[g].agendamentos += Number(dadosBrutos.porGestor[g].agendamentos) || 0;
         });
       }
 
@@ -368,21 +374,50 @@
         fat += Number(r.faturados) || 0;
         aFat += Number(r.aFaturar) || 0;
         fluxo += Number(r.fluxoLoja) || 0;
-        leads += Number(r.leads) || 0;
-        agend += Number(r.agendamentos) || 0;
       });
 
       document.getElementById("kpiFaturados").innerText = fat;
       document.getElementById("kpiAFaturar").innerText = aFat;
       document.getElementById("kpiFluxoLoja").innerText = fluxo;
-      document.getElementById("kpiLeads").innerText = leads;
-      document.getElementById("kpiAgendamentos").innerText = agend;
       document.getElementById("totalRegistrosBadge").innerText = `${registrosFiltrados.length} Registros`;
 
+      // Atualiza BDC
+      const bdcData = dadosBrutos.bdcConsolidado || { totalLeads: 0, totalAgendamentos: 0 };
+      document.getElementById("kpiBdcLeads").innerText = bdcData.totalLeads;
+      document.getElementById("kpiBdcAgend").innerText = bdcData.totalAgendamentos;
+      
+      let totalRepassados = 0;
+      (dadosBrutos.bdcRegistros || []).forEach(b => totalRepassados += Number(b.repassados) || 0);
+      let ef = bdcData.totalLeads > 0 ? ((totalRepassados / bdcData.totalLeads) * 100).toFixed(1) + "%" : "0%";
+      document.getElementById("kpiBdcEficiencia").innerText = ef;
+
+      renderizarTabelaBdc(dadosBrutos.bdcRegistros || []);
       renderizarCardsMicroGestores(gestoresAgrupados);
-      atualizarMetasEProjecao(dadosBrutos.porGestor || {}, dadosBrutos.diasComRegistro || 1, leads, agend);
+      atualizarMetas(dadosBrutos.porGestor || {});
       renderizarTabela(registrosFiltrados);
-      renderizarGraficos(gestoresAgrupados, { fat, aFat, fluxo, leads, agend });
+      renderizarGraficos(gestoresAgrupados);
+    }
+
+    function renderizarTabelaBdc(regsBdc) {
+      const tbody = document.getElementById("tabelaBdcRespostas");
+      tbody.innerHTML = "";
+      if (regsBdc.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-slate-500">Nenhum registro de BDC encontrado.</td></tr>`;
+        return;
+      }
+      regsBdc.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-800/50 transition-colors";
+        tr.innerHTML = `
+          <td class="px-4 py-2 font-mono text-slate-400">${r.data}</td>
+          <td class="px-4 py-2 font-semibold text-cyan-300">${r.loja}</td>
+          <td class="px-4 py-2 text-center text-cyan-400 font-bold">${r.agendamentos}</td>
+          <td class="px-4 py-2 text-center text-amber-400 font-bold">${r.leadsTrf}</td>
+          <td class="px-4 py-2 text-center text-emerald-400 font-bold">${r.repassados}</td>
+          <td class="px-4 py-2 text-center text-purple-400 font-bold">${r.pctRepasse}</td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
     function renderizarCardsMicroGestores(gestoresAgrupados) {
@@ -394,11 +429,10 @@
         card.className = "bg-slate-900 border border-slate-800 p-3 rounded-lg";
         card.innerHTML = `
           <div class="text-xs font-bold text-white mb-2 truncate" title="${g}">${g}</div>
-          <div class="grid grid-cols-4 gap-1 text-center text-[10px]">
+          <div class="grid grid-cols-3 gap-1 text-center text-[10px]">
             <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400 block">Fat.</span><strong class="text-emerald-400 text-xs">${d.faturados}</strong></div>
             <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400 block">A Fat.</span><strong class="text-blue-400 text-xs">${d.aFaturar}</strong></div>
             <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400 block">Fluxo</span><strong class="text-purple-400 text-xs">${d.fluxo}</strong></div>
-            <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400 block">Agend.</span><strong class="text-cyan-400 text-xs">${d.agendamentos}</strong></div>
           </div>
         `;
         container.appendChild(card);
@@ -411,7 +445,7 @@
       return 'bg-emerald-500';
     }
 
-    function atualizarMetasEProjecao(porGestor, diasPercebidos, totalLeadsBdc, totalAgendBdc) {
+    function atualizarMetas(porGestor) {
       let gacNatal = 0, gacMaceio = 0, gacJp = 0, gacCg = 0;
       let mbNatal = 0, mbMaceio = 0;
       let selectMarcio = 0;
@@ -460,16 +494,13 @@
       barSelect.style.width = `${pctSelect}%`;
       barSelect.className = `h-2.5 rounded-full transition-all duration-1000 ${obterCorDinamicaMeta(pctSelect)}`;
       document.getElementById("selectMarcioVal").innerText = `${selectMarcio}/20`;
-
-      document.getElementById("kheltonLeadsVal").innerText = totalLeadsBdc;
-      document.getElementById("kheltonAgendVal").innerText = totalAgendBdc;
     }
 
     function renderizarTabela(registros) {
       const tbody = document.getElementById("tabelaRespostas");
       tbody.innerHTML = "";
       if (registros.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">Nenhum registro encontrado.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500">Nenhum registro encontrado.</td></tr>`;
         return;
       }
       registros.forEach(r => {
@@ -482,14 +513,12 @@
           <td class="px-4 py-3 text-center text-emerald-400 font-bold">${r.faturados}</td>
           <td class="px-4 py-3 text-center text-blue-400 font-bold">${r.aFaturar}</td>
           <td class="px-4 py-3 text-center text-purple-400 font-bold">${r.fluxoLoja}</td>
-          <td class="px-4 py-3 text-center text-amber-400 font-bold">${r.leads}</td>
-          <td class="px-4 py-3 text-center text-cyan-400 font-bold">${r.agendamentos}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    function renderizarGraficos(gestoresAgrupados, totais) {
+    function renderizarGraficos(gestoresAgrupados) {
       const labelsCompletos = Object.keys(gestoresAgrupados);
       const labelsCurtos = labelsCompletos.map(g => g.split(" - ")[0]);
 
@@ -516,24 +545,6 @@
         }
       });
 
-      const ctxBdc = document.getElementById('chartBdc').getContext('2d');
-      if (chartBdcInstance) chartBdcInstance.destroy();
-      chartBdcInstance = new Chart(ctxBdc, {
-        type: 'bar',
-        data: {
-          labels: labelsCurtos,
-          datasets: [
-            { label: 'Agendamentos', data: labelsCompletos.map(g => gestoresAgrupados[g].agendamentos), backgroundColor: '#06b6d4', borderRadius: 4 },
-            { label: 'Fluxo no Salão', data: labelsCompletos.map(g => gestoresAgrupados[g].fluxo), backgroundColor: '#a855f7', borderRadius: 4 }
-          ]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 10 } } } },
-          scales: { x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } }
-        }
-      });
-
       const ctxGestores = document.getElementById('chartGestores').getContext('2d');
       if (chartGestoresInstance) chartGestoresInstance.destroy();
       chartGestoresInstance = new Chart(ctxGestores, {
@@ -550,24 +561,6 @@
           responsive: true, maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: { x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } }
-        }
-      });
-
-      const ctxFunil = document.getElementById('chartFunil').getContext('2d');
-      if (chartFunilInstance) chartFunilInstance.destroy();
-      chartFunilInstance = new Chart(ctxFunil, {
-        type: 'doughnut',
-        data: {
-          labels: ['Faturados', 'A Faturar', 'Fluxo Loja', 'Agendamentos'],
-          datasets: [{
-            data: [totais.fat, totais.aFat, totais.fluxo, totais.agend],
-            backgroundColor: ['#10b981', '#3b82f6', '#a855f7', '#06b6d4'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 10 } } } }
         }
       });
     }
