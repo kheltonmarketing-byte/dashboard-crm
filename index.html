@@ -30,7 +30,7 @@
     }
   </style>
 </head>
-<body class="bg-[#0b1120] text-slate-100 min-h-screen font-sans antialiased">
+<body class="bg-[#0b1120] text-slate-100 min-h-screen font-sans antialiased flex flex-col justify-between">
 
   <!-- TOP HEADER -->
   <header class="bg-[#0f172a] border-b border-slate-800 px-6 py-4 sticky top-0 z-50 shadow-lg no-print">
@@ -54,7 +54,7 @@
   </header>
 
   <!-- MAIN CONTAINER -->
-  <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+  <main class="max-w-7xl mx-auto px-4 py-8 space-y-8 w-full">
 
     <!-- FILTERS BAR -->
     <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-md no-print">
@@ -215,7 +215,7 @@
     <!-- TABELA -->
     <div id="blocoTabela" class="bg-[#1e293b] border border-slate-700/60 rounded-xl shadow-lg overflow-hidden print-block">
       <div class="p-5 border-b border-slate-800 flex items-center justify-between">
-        <h2 class="text-sm font-bold text-white flex items-center gap-2">
+        <h2 class="text-base font-bold text-white flex items-center gap-2">
           <i data-lucide="list" class="w-4 h-4 text-purple-400"></i> Histórico Consolidado e por Gestor
         </h2>
         <div class="flex items-center gap-3">
@@ -247,8 +247,16 @@
 
   </main>
 
+  <!-- FOOTER ASSINATURA PROFISSIONAL -->
+  <footer class="bg-[#0f172a] border-t border-slate-800 py-6 px-4 text-center mt-auto no-print">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+      <p>© 2026 STA Motors. Todos os direitos reservados.</p>
+      <p class="font-medium text-slate-300">Desenvolvido por <span class="text-blue-400 font-bold">Khelton Sousa</span> — <span class="text-purple-400 font-semibold">KS Marketing</span></p>
+    </div>
+  </footer>
+
   <script>
-    const API_URL = const API_URL = "https://script.google.com/macros/s/AKfycbxAOJ19qDypqRw1GFNMyTQ4_6J1-LZrrraEUSPN74ts95xM0GfKT1EzTw5-ipMJEJsc/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxAOJ19qDypqRw1GFNMyTQ4_6J1-LZrrraEUSPN74ts95xM0GfKT1EzTw5-ipMJEJsc/exec";
 
     let dadosBrutos = null;
     let chartGestoresInstance = null;
@@ -343,21 +351,25 @@
         gestoresAgrupados[g] = { faturados: 0, aFaturar: 0, fluxo: 0, leads: 0, agendamentos: 0 };
       });
 
+      if (dadosBrutos.porGestor) {
+        Object.keys(dadosBrutos.porGestor).forEach(g => {
+          if (!gestoresAgrupados[g]) {
+            gestoresAgrupados[g] = { faturados: 0, aFaturar: 0, fluxo: 0, leads: 0, agendamentos: 0 };
+          }
+          gestoresAgrupados[g].faturados += Number(dadosBrutos.porGestor[g].faturados) || 0;
+          gestoresAgrupados[g].aFaturar += Number(dadosBrutos.porGestor[g].aFaturar) || 0;
+          gestoresAgrupados[g].fluxo += Number(dadosBrutos.porGestor[g].fluxoLoja) || 0;
+          gestoresAgrupados[g].leads += Number(dadosBrutos.porGestor[g].leads) || 0;
+          gestoresAgrupados[g].agendamentos += Number(dadosBrutos.porGestor[g].agendamentos) || 0;
+        });
+      }
+
       registrosFiltrados.forEach(r => {
         fat += Number(r.faturados) || 0;
         aFat += Number(r.aFaturar) || 0;
         fluxo += Number(r.fluxoLoja) || 0;
         leads += Number(r.leads) || 0;
         agend += Number(r.agendamentos) || 0;
-
-        if (!gestoresAgrupados[r.gestor]) {
-          gestoresAgrupados[r.gestor] = { faturados: 0, aFaturar: 0, fluxo: 0, leads: 0, agendamentos: 0 };
-        }
-        gestoresAgrupados[r.gestor].faturados += Number(r.faturados) || 0;
-        gestoresAgrupados[r.gestor].aFaturar += Number(r.aFaturar) || 0;
-        gestoresAgrupados[r.gestor].fluxo += Number(r.fluxoLoja) || 0;
-        gestoresAgrupados[r.gestor].leads += Number(r.leads) || 0;
-        gestoresAgrupados[r.gestor].agendamentos += Number(r.agendamentos) || 0;
       });
 
       document.getElementById("kpiFaturados").innerText = fat;
