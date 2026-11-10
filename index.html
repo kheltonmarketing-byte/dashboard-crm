@@ -127,7 +127,7 @@
       </div>
     </div>
 
-    <!-- SEÇÃO EXCLUSIVA: BDC & TRÁFEGO (KHELTON) -->
+    <!-- SEÇÃO EXCLUSIVA: BDC & TRÁFEGO (KHELTON) - VISÃO MACRO E MICRO POR LOJA -->
     <div id="blocoBdc" class="bg-[#1e293b] border border-cyan-500/40 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
@@ -136,6 +136,7 @@
         <span class="text-xs bg-cyan-500/20 text-cyan-300 px-3 py-1 rounded-full border border-cyan-500/30 font-medium">Tempo Real (Forms BDC)</span>
       </div>
 
+      <!-- MACRO CARDS BDC -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-4">
           <span class="text-xs font-semibold text-cyan-400 uppercase">Total Leads (Tráfego)</span>
@@ -151,6 +152,27 @@
         </div>
       </div>
 
+      <!-- VISÃO MICRO POR LOJA (BDC) -->
+      <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800 mb-6">
+        <h3 class="text-xs font-bold text-cyan-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+          <i data-lucide="map-pin" class="w-4 h-4"></i> Detalhamento Micro por Loja (Operação BDC)
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="bdcMicroContainer"></div>
+      </div>
+
+      <!-- GRÁFICOS MICRO BDC POR LOJA -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+          <h3 class="text-sm font-bold text-white mb-2">Leads de Tráfego vs Repassados por Loja (BDC)</h3>
+          <div class="relative h-64"><canvas id="chartBdcLoja"></canvas></div>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+          <h3 class="text-sm font-bold text-white mb-2">Agendamentos BDC por Loja</h3>
+          <div class="relative h-64"><canvas id="chartBdcAgendamentos"></canvas></div>
+        </div>
+      </div>
+
+      <!-- HISTÓRICO DE REGISTROS BDC -->
       <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800">
         <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Histórico de Registros do BDC</h3>
         <div class="overflow-x-auto">
@@ -273,6 +295,8 @@
     let dadosBrutos = null;
     let chartGestoresInstance = null;
     let chartConversaoInstance = null;
+    let chartBdcLojaInstance = null;
+    let chartBdcAgendInstance = null;
 
     lucide.createIcons();
 
@@ -304,8 +328,10 @@
           "Marcio - Maceió (STA Select)": { faturados: 2, aFaturar: 1, fluxoLoja: 5, marca: "STA Select" }
         },
         registros: [],
-        bdcRegistros: [],
-        bdcConsolidado: { totalLeads: 0, totalAgendamentos: 0 }
+        bdcRegistros: [
+          { data: "2026-10-17 10:34", loja: "NATAL", agendamentos: 0, leadsTrf: 0, repassados: 2, pctRepasse: "0%" }
+        ],
+        bdcConsolidado: { totalLeads: 0, totalAgendamentos: 0, porLoja: { "NATAL": { leads: 0, agendamentos: 0, repassados: 2 } } }
       };
       popularFiltroGestores(dadosBrutos.porGestor);
       aplicarFiltros();
@@ -331,7 +357,6 @@
 
       let registrosFiltrados = dadosBrutos.registros || [];
 
-      // Ajuste inteligente: se o gestor vier como "NATAL", tratamos como Khelton / Operação BDC ou ajustamos a exibição sem sumir com a linha
       registrosFiltrados = registrosFiltrados.map(r => {
         const gName = (r.gestor || "").trim().toUpperCase();
         if (gName === "NATAL" || gName === "") {
@@ -389,8 +414,8 @@
       document.getElementById("kpiFluxoLoja").innerText = fluxo;
       document.getElementById("totalRegistrosBadge").innerText = `${registrosFiltrados.length} Registros`;
 
-      // Atualiza BDC
-      const bdcData = dadosBrutos.bdcConsolidado || { totalLeads: 0, totalAgendamentos: 0 };
+      // Atualiza BDC Macro e Micro por Loja
+      const bdcData = dadosBrutos.bdcConsolidado || { totalLeads: 0, totalAgendamentos: 0, porLoja: {} };
       document.getElementById("kpiBdcLeads").innerText = bdcData.totalLeads;
       document.getElementById("kpiBdcAgend").innerText = bdcData.totalAgendamentos;
       
@@ -399,11 +424,38 @@
       let ef = bdcData.totalLeads > 0 ? ((totalRepassados / bdcData.totalLeads) * 100).toFixed(1) + "%" : "0%";
       document.getElementById("kpiBdcEficiencia").innerText = ef;
 
+      renderizarCardsBdcMicro(bdcData.porLoja || {});
       renderizarTabelaBdc(dadosBrutos.bdcRegistros || []);
       renderizarCardsMicroGestores(gestoresAgrupados);
       atualizarMetas(dadosBrutos.porGestor || {});
       renderizarTabela(registrosFiltrados);
       renderizarGraficos(gestoresAgrupados);
+      renderizarGraficosBdc(bdcData.porLoja || {});
+    }
+
+    function renderizarCardsBdcMicro(porLoja) {
+      const container = document.getElementById("bdcMicroContainer");
+      container.innerHTML = "";
+      const lojas = Object.keys(porLoja);
+      if (lojas.length === 0) {
+        container.innerHTML = `<div class="col-span-full text-center text-slate-500 text-xs py-2">Nenhuma loja BDC registrada.</div>`;
+        return;
+      }
+      lojas.forEach(loja => {
+        const d = porLoja[loja];
+        const pct = d.leads > 0 ? ((d.repassados / d.leads) * 100).toFixed(1) + "%" : "0%";
+        const card = document.createElement("div");
+        card.className = "bg-slate-900 border border-cyan-500/30 p-3 rounded-lg";
+        card.innerHTML = `
+          <div class="text-xs font-bold text-cyan-300 mb-2 truncate">${loja}</div>
+          <div class="grid grid-cols-3 gap-1 text-center text-[10px]">
+            <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400 block">Leads</span><strong class="text-cyan-400 text-xs">${d.leads}</strong></div>
+            <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400 block">Agend.</span><strong class="text-blue-400 text-xs">${d.agendamentos}</strong></div>
+            <div class="bg-slate-950 p-1 rounded"><span class="text-slate-400 block">Repasse</span><strong class="text-emerald-400 text-xs">${pct}</strong></div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
     }
 
     function renderizarTabelaBdc(regsBdc) {
@@ -561,6 +613,51 @@
           labels: labelsCurtos,
           datasets: [{
             data: labelsCompletos.map(g => gestoresAgrupados[g].faturados),
+            backgroundColor: '#3b82f6',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } }
+        }
+      });
+    }
+
+    function renderizarGraficosBdc(porLoja) {
+      const lojas = Object.keys(porLoja);
+      const leadsVals = lojas.map(l => porLoja[l].leads);
+      const repassadosVals = lojas.map(l => porLoja[l].repassados);
+      const agendVals = lojas.map(l => porLoja[l].agendamentos);
+
+      const ctxBdcLoja = document.getElementById('chartBdcLoja').getContext('2d');
+      if (chartBdcLojaInstance) chartBdcLojaInstance.destroy();
+      chartBdcLojaInstance = new Chart(ctxBdcLoja, {
+        type: 'bar',
+        data: {
+          labels: lojas,
+          datasets: [
+            { label: 'Leads Tráfego', data: leadsVals, backgroundColor: '#06b6d4', borderRadius: 4 },
+            { label: 'Repassados', data: repassadosVals, backgroundColor: '#10b981', borderRadius: 4 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#94a3b8', font: { size: 10 } } } },
+          scales: { x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } }
+        }
+      });
+
+      const ctxBdcAgend = document.getElementById('chartBdcAgendamentos').getContext('2d');
+      if (chartBdcAgendInstance) chartBdcAgendInstance.destroy();
+      chartBdcAgendInstance = new Chart(ctxBdcAgend, {
+        type: 'bar',
+        data: {
+          labels: lojas,
+          datasets: [{
+            label: 'Agendamentos BDC',
+            data: agendVals,
             backgroundColor: '#3b82f6',
             borderRadius: 6
           }]
