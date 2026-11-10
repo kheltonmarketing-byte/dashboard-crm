@@ -9,8 +9,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Chart.js DataLabels Plugin -->
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -143,7 +141,7 @@
       </div>
     </div>
 
-    <!-- INDICADORES OPERACIONAIS DE DIRETORIA (COM VISAO MICRO POR GESTOR) -->
+    <!-- INDICADORES OPERACIONAIS -->
     <div id="blocoKpis" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
@@ -154,45 +152,36 @@
         </button>
       </div>
 
-      <!-- CARDS CONSOLIDADOS GERAIS -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
         <div class="bg-slate-900/90 border border-emerald-500/30 rounded-xl p-4">
-          <span class="text-xs font-semibold text-emerald-400 uppercase">Faturados (Dia - Total)</span>
+          <span class="text-xs font-semibold text-emerald-400 uppercase">Faturados (Total)</span>
           <div id="kpiFaturados" class="text-3xl font-black text-white mt-2">0</div>
-          <p class="text-[11px] text-slate-400 mt-1">Carros Faturados</p>
         </div>
         <div class="bg-slate-900/90 border border-blue-500/30 rounded-xl p-4">
           <span class="text-xs font-semibold text-blue-400 uppercase">A Faturar (Total)</span>
           <div id="kpiAFaturar" class="text-3xl font-black text-white mt-2">0</div>
-          <p class="text-[11px] text-slate-400 mt-1">Em Processo</p>
         </div>
         <div class="bg-slate-900/90 border border-purple-500/30 rounded-xl p-4">
           <span class="text-xs font-semibold text-purple-400 uppercase">Fluxo Loja (Total)</span>
           <div id="kpiFluxoLoja" class="text-3xl font-black text-white mt-2">0</div>
-          <p class="text-[11px] text-slate-400 mt-1">Atendimentos Salão</p>
         </div>
         <div class="bg-slate-900/90 border border-amber-500/30 rounded-xl p-4">
-          <span class="text-xs font-semibold text-amber-400 uppercase">Leads (Khelton BDC)</span>
+          <span class="text-xs font-semibold text-amber-400 uppercase">Leads (Khelton)</span>
           <div id="kpiLeads" class="text-3xl font-black text-white mt-2">0</div>
-          <p class="text-[11px] text-slate-400 mt-1">Oportunidades Digital</p>
         </div>
         <div class="bg-slate-900/90 border border-cyan-500/30 rounded-xl p-4">
-          <span class="text-xs font-semibold text-cyan-400 uppercase">Agendamentos (Total)</span>
+          <span class="text-xs font-semibold text-cyan-400 uppercase">Agendamentos</span>
           <div id="kpiAgendamentos" class="text-3xl font-black text-white mt-2">0</div>
-          <p class="text-[11px] text-slate-400 mt-1">Agendados BDC</p>
         </div>
       </div>
 
-      <!-- DETALHAMENTO MICRO POR CADA GESTOR (TABELA / CARDS INTERNOS) -->
       <div class="bg-slate-950/60 rounded-xl p-4 border border-slate-800">
         <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Detalhamento Unificado por Gestor</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="microGestoresContainer">
-          <!-- Preenchido dinamicamente via JS -->
-        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" id="microGestoresContainer"></div>
       </div>
     </div>
 
-    <!-- GRÁFICOS VISÃO MICRO POR GESTOR -->
+    <!-- GRÁFICOS MICRO POR GESTOR -->
     <div id="blocoGraficos" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-6">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
@@ -223,7 +212,7 @@
       </div>
     </div>
 
-    <!-- TABELA DE LANÇAMENTOS -->
+    <!-- TABELA -->
     <div id="blocoTabela" class="bg-[#1e293b] border border-slate-700/60 rounded-xl shadow-lg overflow-hidden print-block">
       <div class="p-5 border-b border-slate-800 flex items-center justify-between">
         <h2 class="text-sm font-bold text-white flex items-center gap-2">
@@ -268,7 +257,6 @@
     let chartBdcInstance = null;
 
     lucide.createIcons();
-    Chart.register(ChartDataLabels);
 
     async function carregarDados() {
       try {
@@ -388,7 +376,6 @@
     function renderizarCardsMicroGestores(gestoresAgrupados) {
       const container = document.getElementById("microGestoresContainer");
       container.innerHTML = "";
-
       Object.keys(gestoresAgrupados).forEach(g => {
         const d = gestoresAgrupados[g];
         const card = document.createElement("div");
@@ -464,26 +451,6 @@
 
       document.getElementById("kheltonLeadsVal").innerText = totalLeadsBdc;
       document.getElementById("kheltonAgendVal").innerText = totalAgendBdc;
-
-      const diasCorr = Math.max(1, diasPercebidos);
-      const ritmoTotalDia = (totalGac + totalMb + totalSelect) / diasCorr;
-      document.getElementById("ritmoDiarioVal").innerText = ritmoTotalDia.toFixed(1);
-
-      const projGac = Math.round((totalGac / diasCorr) * 30);
-      const projMb = Math.round((totalMb / diasCorr) * 30);
-      const projSelect = Math.round((totalSelect / diasCorr) * 30);
-
-      document.getElementById("projGacTotal").innerText = `${projGac} veículos`;
-      document.getElementById("projGacPct").innerText = `${Math.round((projGac / 220) * 100)}%`;
-      document.getElementById("projGacBar").style.width = `${Math.min(100, Math.round((projGac / 220) * 100))}%`;
-
-      document.getElementById("projMbTotal").innerText = `${projMb} veículos`;
-      document.getElementById("projMbPct").innerText = `${Math.round((projMb / 16) * 100)}%`;
-      document.getElementById("projMbBar").style.width = `${Math.min(100, Math.round((projMb / 16) * 100))}%`;
-
-      document.getElementById("projSelectTotal").innerText = `${projSelect} veículos`;
-      document.getElementById("projSelectPct").innerText = `${Math.round((projSelect / 20) * 100)}%`;
-      document.getElementById("projSelectBar").style.width = `${Math.min(100, Math.round((projSelect / 20) * 100))}%`;
     }
 
     function renderizarTabela(registros) {
@@ -532,7 +499,7 @@
         },
         options: {
           responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false }, datalabels: { color: '#fff', font: { weight: 'bold', size: 10 }, formatter: v => v > 0 ? v + '%' : '' } },
+          plugins: { legend: { display: false } },
           scales: { x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8', callback: v => v + '%' }, grid: { color: '#334155' } } }
         }
       });
@@ -550,7 +517,7 @@
         },
         options: {
           responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 10 } } }, datalabels: { color: '#fff', font: { size: 9 }, formatter: v => v > 0 ? v : '' } },
+          plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 10 } } } },
           scales: { x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } }
         }
       });
@@ -569,7 +536,7 @@
         },
         options: {
           responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false }, datalabels: { color: '#fff', font: { weight: 'bold', size: 11 }, formatter: v => v > 0 ? v : '' } },
+          plugins: { legend: { display: false } },
           scales: { x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } }
         }
       });
@@ -588,10 +555,7 @@
         },
         options: {
           responsive: true, maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 10 } } },
-            datalabels: { color: '#fff', font: { weight: 'bold', size: 11 }, formatter: v => v > 0 ? v : '' }
-          }
+          plugins: { legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 10 } } } }
         }
       });
     }
