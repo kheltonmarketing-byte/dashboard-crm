@@ -9,7 +9,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Chart.js DataLabels Plugin for numbers inside charts -->
+  <!-- Chart.js DataLabels Plugin -->
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -31,29 +31,34 @@
       }
     }
   </script>
+  <style>
+    @media print {
+      body { background: #ffffff !important; color: #000000 !important; }
+      .no-print { display: none !important; }
+      .print-block { border: 1px solid #cbd5e1 !important; background: #ffffff !important; color: #000000 !important; box-shadow: none !important; }
+    }
+  </style>
 </head>
 <body class="bg-[#0b1120] text-slate-100 min-h-screen font-sans antialiased">
 
-  <!-- TOP HEADER CLEAN (SEM LOGOS) -->
-  <header class="bg-[#0f172a] border-b border-slate-800 px-6 py-4 sticky top-0 z-50 shadow-lg">
+  <!-- TOP HEADER -->
+  <header class="bg-[#0f172a] border-b border-slate-800 px-6 py-4 sticky top-0 z-50 shadow-lg no-print">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
       
-      <!-- BRAND TITLE -->
       <div class="flex items-center gap-3">
         <div class="bg-blue-600/20 border border-blue-500/30 p-2 rounded-xl">
           <i data-lucide="layout-dashboard" class="w-6 h-6 text-blue-400"></i>
         </div>
         <div>
           <h1 class="text-lg font-bold text-white tracking-wide">STA Motors — Painel Executivo de Vendas</h1>
-          <p class="text-xs text-slate-400">Gestão Consolidada de Operações, Metas e BDC em Tempo Real</p>
+          <p class="text-xs text-slate-400">Gestão Consolidada de Operações, Metas, BDC e Leads em Tempo Real</p>
         </div>
       </div>
 
-      <!-- STATUS AO VIVO -->
       <div class="flex items-center gap-3">
         <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-xs text-emerald-400 font-medium">Sistema Operacional Ao Vivo</span>
+          <span class="text-xs text-emerald-400 font-medium">Sistema Ao Vivo</span>
         </div>
       </div>
 
@@ -64,19 +69,24 @@
   <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
 
     <!-- FILTERS BAR -->
-    <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-md">
+    <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-md no-print">
       <div class="flex items-center gap-2 text-slate-300 font-medium text-sm">
         <i data-lucide="filter" class="w-4 h-4 text-blue-400"></i>
         <span>Filtro Geral do Painel:</span>
       </div>
       <div class="flex flex-wrap items-center gap-3">
         <div>
+          <label for="filterData" class="sr-only">Data</label>
+          <input type="date" id="filterData" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div>
           <label for="filterMarca" class="sr-only">Marca</label>
           <select id="filterMarca" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
-            <option value="TODAS">Todas as Marcas (GAC + Mercedes + STA Select)</option>
+            <option value="TODAS">Todas as Marcas (GAC + Mercedes + Select + BDC)</option>
             <option value="GAC">GAC Motors</option>
             <option value="MERCEDES">Mercedes-Benz</option>
-            <option value="STA SELECT">STA Select (Marcio)</option>
+            <option value="STA SELECT">STA Select (Seminovos)</option>
+            <option value="BDC">BDC / Operações (Khelton)</option>
           </select>
         </div>
         <div>
@@ -87,289 +97,211 @@
         </div>
         <button onclick="carregarDados()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition-all shadow">
           <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-          Atualizar Dados
+          Atualizar
         </button>
       </div>
     </div>
 
-    <!-- METAS DE VENDAS (GAC 220 / MERCEDES 16 / STA SELECT 20) -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- BLOCO META GAC MOTORS -->
-      <div class="bg-[#1e293b] border border-blue-500/30 rounded-xl p-6 shadow-lg relative flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
-            <div class="flex items-center gap-2">
-              <i data-lucide="target" class="w-5 h-5 text-blue-400"></i>
-              <h2 class="text-sm font-bold text-white">GAC Motors</h2>
-            </div>
-            <span class="text-[11px] bg-blue-500/20 text-blue-300 font-semibold px-2 py-0.5 rounded-full border border-blue-500/30">
-              Meta: 220 Veículos
-            </span>
-          </div>
+    <!-- METAS DE VENDAS -->
+    <div id="blocoMetas" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
+      <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
+        <h2 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="target" class="w-5 h-5 text-blue-400"></i> Atingimento de Metas por Marca e Gestor
+        </h2>
+        <button onclick="imprimirBloco('blocoMetas')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir Bloco
+        </button>
+      </div>
 
-          <div class="mb-4">
-            <div class="flex justify-between text-xs font-semibold mb-1">
-              <span class="text-slate-300">Progresso Geral</span>
-              <span id="gacMetaPercent" class="text-blue-400">0% (0 / 220)</span>
-            </div>
-            <div class="w-full bg-slate-900 rounded-full h-3.5 overflow-hidden border border-slate-700">
-              <div id="gacMetaBar" class="bg-gradient-to-r from-blue-600 to-cyan-400 h-3.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
-            </div>
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- GAC -->
+        <div class="bg-slate-900/80 border border-blue-500/30 rounded-xl p-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-blue-400 uppercase">GAC Motors</span>
+            <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">Meta: 220</span>
+          </div>
+          <div class="text-xl font-black text-white mb-2" id="gacMetaVal">0 / 220</div>
+          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3">
+            <div id="gacMetaBar" class="bg-blue-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
+          </div>
+          <div class="space-y-1 text-[11px] text-slate-300">
+            <div class="flex justify-between"><span>Natal (Davys):</span> <strong id="gacNatalVal">0/60</strong></div>
+            <div class="flex justify-between"><span>Maceió (Willen):</span> <strong id="gacMaceioVal">0/60</strong></div>
+            <div class="flex justify-between"><span>João Pessoa (Higor):</span> <strong id="gacJpVal">0/60</strong></div>
+            <div class="flex justify-between"><span>Campina Grande:</span> <strong id="gacCgVal">0/40</strong></div>
           </div>
         </div>
 
-        <!-- BREAKDOWN GAC -->
-        <div class="grid grid-cols-2 gap-2 pt-2">
-          <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800">
-            <span class="text-[10px] text-slate-400 font-medium block">Natal (Davys)</span>
-            <span id="gacNatalVal" class="text-xs font-bold text-white">0 / 60</span>
-            <div class="text-[10px] text-blue-400 font-semibold" id="gacNatalPct">0%</div>
+        <!-- MERCEDES -->
+        <div class="bg-slate-900/80 border border-emerald-500/30 rounded-xl p-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-emerald-400 uppercase">Mercedes-Benz</span>
+            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full">Meta: 16</span>
           </div>
-          <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800">
-            <span class="text-[10px] text-slate-400 font-medium block">Maceió (Willen)</span>
-            <span id="gacMaceioVal" class="text-xs font-bold text-white">0 / 60</span>
-            <div class="text-[10px] text-blue-400 font-semibold" id="gacMaceioPct">0%</div>
+          <div class="text-xl font-black text-white mb-2" id="mbMetaVal">0 / 16</div>
+          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3">
+            <div id="mbMetaBar" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
           </div>
-          <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800">
-            <span class="text-[10px] text-slate-400 font-medium block">João Pessoa (Higor)</span>
-            <span id="gacJpVal" class="text-xs font-bold text-white">0 / 60</span>
-            <div class="text-[10px] text-blue-400 font-semibold" id="gacJpPct">0%</div>
+          <div class="space-y-1 text-[11px] text-slate-300">
+            <div class="flex justify-between"><span>Natal (Renata):</span> <strong id="mbNatalVal">0/8</strong></div>
+            <div class="flex justify-between"><span>Maceió (Anielly):</span> <strong id="mbMaceioVal">0/8</strong></div>
           </div>
-          <div class="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800">
-            <span class="text-[10px] text-slate-400 font-medium block">Campina Grande</span>
-            <span id="gacCgVal" class="text-xs font-bold text-white">0 / 40</span>
-            <div class="text-[10px] text-blue-400 font-semibold" id="gacCgPct">0%</div>
+        </div>
+
+        <!-- STA SELECT -->
+        <div class="bg-slate-900/80 border border-purple-500/30 rounded-xl p-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-purple-400 uppercase">STA Select</span>
+            <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">Meta: 20</span>
+          </div>
+          <div class="text-xl font-black text-white mb-2" id="selectMetaVal">0 / 20</div>
+          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3">
+            <div id="selectMetaBar" class="bg-purple-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
+          </div>
+          <div class="space-y-1 text-[11px] text-slate-300">
+            <div class="flex justify-between"><span>Maceió (Marcio):</span> <strong id="selectMarcioVal">0/20</strong></div>
+          </div>
+        </div>
+
+        <!-- BDC / KHELTON -->
+        <div class="bg-slate-900/80 border border-cyan-500/30 rounded-xl p-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-cyan-400 uppercase">BDC / Operação</span>
+            <span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full">Gestor: Khelton</span>
+          </div>
+          <div class="text-xl font-black text-white mb-2" id="kheltonMetaVal">Ativo</div>
+          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3">
+            <div class="bg-cyan-500 h-2.5 rounded-full" style="width: 100%"></div>
+          </div>
+          <div class="space-y-1 text-[11px] text-slate-300">
+            <div class="flex justify-between"><span>Leads Gerenciados:</span> <strong id="kheltonLeadsVal">0</strong></div>
+            <div class="flex justify-between"><span>Agendamentos BDC:</span> <strong id="kheltonAgendVal">0</strong></div>
           </div>
         </div>
       </div>
-
-      <!-- BLOCO META MERCEDES-BENZ -->
-      <div class="bg-[#1e293b] border border-emerald-500/30 rounded-xl p-6 shadow-lg relative flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
-            <div class="flex items-center gap-2">
-              <i data-lucide="award" class="w-5 h-5 text-emerald-400"></i>
-              <h2 class="text-sm font-bold text-white">Mercedes-Benz</h2>
-            </div>
-            <span class="text-[11px] bg-emerald-500/20 text-emerald-300 font-semibold px-2 py-0.5 rounded-full border border-emerald-500/30">
-              Meta: 16 Veículos
-            </span>
-          </div>
-
-          <div class="mb-4">
-            <div class="flex justify-between text-xs font-semibold mb-1">
-              <span class="text-slate-300">Progresso Geral</span>
-              <span id="mbMetaPercent" class="text-emerald-400">0% (0 / 16)</span>
-            </div>
-            <div class="w-full bg-slate-900 rounded-full h-3.5 overflow-hidden border border-slate-700">
-              <div id="mbMetaBar" class="bg-gradient-to-r from-emerald-600 to-teal-400 h-3.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- BREAKDOWN MERCEDES (3 GRÁFICOS / CARDS CONFORME PEDIDO) -->
-        <div class="grid grid-cols-2 gap-2 pt-2">
-          <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-800">
-            <span class="text-[10px] text-slate-400 font-medium block">Natal (Renata)</span>
-            <span id="mbNatalVal" class="text-xs font-bold text-white">0 / 8</span>
-            <div class="text-[10px] text-emerald-400 font-semibold mt-0.5" id="mbNatalPct">0%</div>
-          </div>
-          <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-800">
-            <span class="text-[10px] text-slate-400 font-medium block">Maceió (Anielly)</span>
-            <span id="mbMaceioVal" class="text-xs font-bold text-white">0 / 8</span>
-            <div class="text-[10px] text-emerald-400 font-semibold mt-0.5" id="mbMaceioPct">0%</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- BLOCO META STA SELECT (MARCIO) -->
-      <div class="bg-[#1e293b] border border-purple-500/30 rounded-xl p-6 shadow-lg relative flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
-            <div class="flex items-center gap-2">
-              <i data-lucide="shield-check" class="w-5 h-5 text-purple-400"></i>
-              <h2 class="text-sm font-bold text-white">STA Select (Seminovos)</h2>
-            </div>
-            <span class="text-[11px] bg-purple-500/20 text-purple-300 font-semibold px-2 py-0.5 rounded-full border border-purple-500/30">
-              Meta: 20 Veículos
-            </span>
-          </div>
-
-          <div class="mb-4">
-            <div class="flex justify-between text-xs font-semibold mb-1">
-              <span class="text-slate-300">Progresso Geral STA Select</span>
-              <span id="selectMetaPercent" class="text-purple-400">0% (0 / 20)</span>
-            </div>
-            <div class="w-full bg-slate-900 rounded-full h-3.5 overflow-hidden border border-slate-700">
-              <div id="selectMetaBar" class="bg-gradient-to-r from-purple-600 to-indigo-400 h-3.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 gap-2 pt-2">
-          <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-800">
-            <span class="text-[10px] text-slate-400 font-medium block">Maceió — STA Select (Marcio)</span>
-            <span id="selectMarcioVal" class="text-xs font-bold text-white">0 / 20</span>
-            <div class="text-[10px] text-purple-400 font-semibold mt-0.5" id="selectMarcioPct">0%</div>
-          </div>
-        </div>
-      </div>
-
     </div>
 
-    <!-- PROJEÇÃO DE VENDAS DO MÊS (3 FRENTES) -->
-    <div class="bg-[#1e293b] border border-amber-500/30 rounded-xl p-6 shadow-lg">
+    <!-- PROJEÇÃO DE VENDAS (RUN RATE) -->
+    <div id="blocoProjecao" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-700 pb-4 mb-4 gap-2">
-        <div>
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
-            <i data-lucide="trending-up" class="w-5 h-5 text-amber-400"></i>
-            Projeção de Entrega de Faturamento do Mês (Run Rate em 3 Frentes)
-          </h2>
-          <p class="text-xs text-slate-400">Projeções separadas por GAC Motors, Mercedes-Benz e STA Select (Marcio)</p>
-        </div>
-        <div class="text-xs bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono px-3 py-1.5 rounded-lg">
-          Média do Ritmo Diário: <span id="ritmoDiarioVal" class="font-bold">0.0</span> carros/dia
+        <h2 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="trending-up" class="w-5 h-5 text-amber-400"></i> Projeção de Faturamento (Run Rate)
+        </h2>
+        <div class="flex items-center gap-3">
+          <span class="text-xs text-amber-300 font-mono bg-amber-500/10 border border-amber-500/30 px-3 py-1 rounded-lg">
+            Ritmo: <span id="ritmoDiarioVal" class="font-bold">0.0</span> carros/dia
+          </span>
+          <button onclick="imprimirBloco('blocoProjecao')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
+            <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir
+          </button>
         </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- PROJEÇÃO GAC -->
         <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
           <span class="text-xs text-slate-300 font-semibold block mb-1">GAC Motors (Meta: 220)</span>
           <div class="text-2xl font-black text-amber-400 mb-2" id="projGacTotal">0 veículos</div>
-          <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
-            <span>Ritmo Projetado</span>
-            <span id="projGacPct" class="font-bold text-amber-400">0%</span>
-          </div>
-          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800">
-            <div id="projGacBar" class="bg-amber-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
-          </div>
+          <div class="text-[11px] text-slate-400 mb-1 flex justify-between"><span>Ritmo</span><span id="projGacPct" class="font-bold text-amber-400">0%</span></div>
+          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800"><div id="projGacBar" class="bg-amber-500 h-2.5 rounded-full" style="width: 0%"></div></div>
         </div>
-
-        <!-- PROJEÇÃO MERCEDES -->
         <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
           <span class="text-xs text-slate-300 font-semibold block mb-1">Mercedes-Benz (Meta: 16)</span>
           <div class="text-2xl font-black text-emerald-400 mb-2" id="projMbTotal">0 veículos</div>
-          <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
-            <span>Ritmo Projetado</span>
-            <span id="projMbPct" class="font-bold text-emerald-400">0%</span>
-          </div>
-          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800">
-            <div id="projMbBar" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
-          </div>
+          <div class="text-[11px] text-slate-400 mb-1 flex justify-between"><span>Ritmo</span><span id="projMbPct" class="font-bold text-emerald-400">0%</span></div>
+          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800"><div id="projMbBar" class="bg-emerald-500 h-2.5 rounded-full" style="width: 0%"></div></div>
         </div>
-
-        <!-- PROJEÇÃO STA SELECT -->
         <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
           <span class="text-xs text-slate-300 font-semibold block mb-1">STA Select - Marcio (Meta: 20)</span>
           <div class="text-2xl font-black text-purple-400 mb-2" id="projSelectTotal">0 veículos</div>
-          <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
-            <span>Ritmo Projetado</span>
-            <span id="projSelectPct" class="font-bold text-purple-400">0%</span>
-          </div>
-          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800">
-            <div id="projSelectBar" class="bg-purple-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
-          </div>
+          <div class="text-[11px] text-slate-400 mb-1 flex justify-between"><span>Ritmo</span><span id="projSelectPct" class="font-bold text-purple-400">0%</span></div>
+          <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800"><div id="projSelectBar" class="bg-purple-500 h-2.5 rounded-full" style="width: 0%"></div></div>
         </div>
       </div>
     </div>
 
-    <!-- CARDS DE METRICAS CHAVE -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-      <div class="bg-[#1e293b] border border-emerald-500/30 rounded-xl p-5 shadow-lg relative overflow-hidden">
-        <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Faturados (Dia)</span>
-        <div id="kpiFaturados" class="text-3xl font-black text-white mt-2">0</div>
-        <p class="text-[11px] text-slate-400 mt-1">Carros Faturados</p>
-      </div>
-      <div class="bg-[#1e293b] border border-blue-500/30 rounded-xl p-5 shadow-lg relative overflow-hidden">
-        <span class="text-xs font-semibold text-blue-400 uppercase tracking-wider">A Faturar (Dia/Atu)</span>
-        <div id="kpiAFaturar" class="text-3xl font-black text-white mt-2">0</div>
-        <p class="text-[11px] text-slate-400 mt-1">Em Processo</p>
-      </div>
-      <div class="bg-[#1e293b] border border-purple-500/30 rounded-xl p-5 shadow-lg relative overflow-hidden">
-        <span class="text-xs font-semibold text-purple-400 uppercase tracking-wider">Fluxo de Loja</span>
-        <div id="kpiFluxoLoja" class="text-3xl font-black text-white mt-2">0</div>
-        <p class="text-[11px] text-slate-400 mt-1">Atendimentos no Salão</p>
-      </div>
-      <div class="bg-[#1e293b] border border-amber-500/30 rounded-xl p-5 shadow-lg relative overflow-hidden">
-        <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Leads Recebidos</span>
-        <div id="kpiLeads" class="text-3xl font-black text-white mt-2">0</div>
-        <p class="text-[11px] text-slate-400 mt-1">Oportunidades Digital</p>
-      </div>
-      <div class="bg-[#1e293b] border border-cyan-500/30 rounded-xl p-5 shadow-lg relative overflow-hidden">
-        <span class="text-xs font-semibold text-cyan-400 uppercase tracking-wider">Agendamentos</span>
-        <div id="kpiAgendamentos" class="text-3xl font-black text-white mt-2">0</div>
-        <p class="text-[11px] text-slate-400 mt-1">Agendados BDC/Pré-Venda</p>
-      </div>
-    </div>
-
-    <!-- GRÁFICOS OPERACIONAIS DIRETORIA -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      
-      <!-- GRAFICO 1: CONVERSÃO FLUXO X FATURADOS (%) -->
-      <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg">
-        <div class="mb-4">
-          <h2 class="text-sm font-bold text-white flex items-center gap-2">
-            <i data-lucide="percent" class="w-4 h-4 text-emerald-400"></i>
-            Eficiência da Loja: Conversão Faturados / Fluxo Presencial (%)
-          </h2>
-          <p class="text-[11px] text-slate-400">Percentual de visitantes do salão que fecham compra por unidade</p>
-        </div>
-        <div class="relative h-64">
-          <canvas id="chartConversao"></canvas>
-        </div>
-      </div>
-
-      <!-- GRAFICO 2: PERFORMANCE BDC AGENDAMENTOS X ATENDIMENTOS -->
-      <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg">
-        <div class="mb-4">
-          <h2 class="text-sm font-bold text-white flex items-center gap-2">
-            <i data-lucide="calendar-check" class="w-4 h-4 text-cyan-400"></i>
-            Eficácia BDC: Agendamentos vs. Realizações no Salão
-          </h2>
-          <p class="text-[11px] text-slate-400">Comparativo do volume agendado contra fluxo presencial do dia</p>
-        </div>
-        <div class="relative h-64">
-          <canvas id="chartBdc"></canvas>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- GRÁFICOS COMPLEMENTARES COM NUMEROS DENTRO DAS BARRAS E PIZZA -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg">
-        <h2 class="text-sm font-bold text-white mb-4 flex items-center gap-2">
-          <i data-lucide="bar-chart-2" class="w-4 h-4 text-blue-400"></i>
-          Volume de Faturados por Gestor / Loja (Com Totais na Barra)
+    <!-- CARDS DE METRICAS CHAVE (KPIS) -->
+    <div id="blocoKpis" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
+      <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
+        <h2 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="bar-chart-3" class="w-5 h-5 text-cyan-400"></i> Indicadores Operacionais
         </h2>
-        <div class="relative h-64">
-          <canvas id="chartGestores"></canvas>
-        </div>
+        <button onclick="imprimirBloco('blocoKpis')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir Bloco
+        </button>
       </div>
 
-      <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg">
-        <h2 class="text-sm font-bold text-white mb-4 flex items-center gap-2">
-          <i data-lucide="pie-chart" class="w-4 h-4 text-purple-400"></i>
-          Proporção da Operação Geral (Com Valores nas Fatias)
-        </h2>
-        <div class="relative h-64 flex items-center justify-center">
-          <canvas id="chartFunil"></canvas>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="bg-slate-900/80 border border-emerald-500/30 rounded-xl p-4">
+          <span class="text-xs font-semibold text-emerald-400 uppercase">Faturados (Dia)</span>
+          <div id="kpiFaturados" class="text-3xl font-black text-white mt-2">0</div>
+          <p class="text-[11px] text-slate-400 mt-1">Carros Faturados</p>
+        </div>
+        <div class="bg-slate-900/80 border border-blue-500/30 rounded-xl p-4">
+          <span class="text-xs font-semibold text-blue-400 uppercase">A Faturar</span>
+          <div id="kpiAFaturar" class="text-3xl font-black text-white mt-2">0</div>
+          <p class="text-[11px] text-slate-400 mt-1">Em Processo</p>
+        </div>
+        <div class="bg-slate-900/80 border border-purple-500/30 rounded-xl p-4">
+          <span class="text-xs font-semibold text-purple-400 uppercase">Fluxo de Loja</span>
+          <div id="kpiFluxoLoja" class="text-3xl font-black text-white mt-2">0</div>
+          <p class="text-[11px] text-slate-400 mt-1">Atendimentos no Salão</p>
+        </div>
+        <div class="bg-slate-900/80 border border-amber-500/30 rounded-xl p-4">
+          <span class="text-xs font-semibold text-amber-400 uppercase">Leads (Khelton BDC)</span>
+          <div id="kpiLeads" class="text-3xl font-black text-white mt-2">0</div>
+          <p class="text-[11px] text-slate-400 mt-1">Oportunidades Digital</p>
+        </div>
+        <div class="bg-slate-900/80 border border-cyan-500/30 rounded-xl p-4">
+          <span class="text-xs font-semibold text-cyan-400 uppercase">Agendamentos</span>
+          <div id="kpiAgendamentos" class="text-3xl font-black text-white mt-2">0</div>
+          <p class="text-[11px] text-slate-400 mt-1">Agendados BDC</p>
         </div>
       </div>
     </div>
 
-    <!-- TABELA DE LANÇAMENTOS REGISTRADOS -->
-    <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl shadow-lg overflow-hidden">
+    <!-- GRÁFICOS OPERACIONAIS -->
+    <div id="blocoGraficos" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
+      <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-6">
+        <h2 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="pie-chart" class="w-5 h-5 text-purple-400"></i> Gráficos e Análises Executivas
+        </h2>
+        <button onclick="imprimirBloco('blocoGraficos')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir Bloco
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+          <h3 class="text-sm font-bold text-white mb-2">Conversão Salão (%)</h3>
+          <div class="relative h-64"><canvas id="chartConversao"></canvas></div>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+          <h3 class="text-sm font-bold text-white mb-2">Eficácia BDC (Agendamentos vs Fluxo)</h3>
+          <div class="relative h-64"><canvas id="chartBdc"></canvas></div>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+          <h3 class="text-sm font-bold text-white mb-2">Volume de Faturados por Gestor/Loja</h3>
+          <div class="relative h-64"><canvas id="chartGestores"></canvas></div>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+          <h3 class="text-sm font-bold text-white mb-2">Proporção da Operação Geral</h3>
+          <div class="relative h-64 flex items-center justify-center"><canvas id="chartFunil"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABELA DE LANÇAMENTOS -->
+    <div id="blocoTabela" class="bg-[#1e293b] border border-slate-700/60 rounded-xl shadow-lg overflow-hidden print-block">
       <div class="p-5 border-b border-slate-800 flex items-center justify-between">
         <h2 class="text-sm font-bold text-white flex items-center gap-2">
-          <i data-lucide="list" class="w-4 h-4 text-purple-400"></i>
-          Histórico dos Formulários Preenchidos
+          <i data-lucide="list" class="w-4 h-4 text-purple-400"></i> Histórico de Lançamentos
         </h2>
-        <span id="totalRegistrosBadge" class="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-2.5 py-1 rounded-full">
-          0 Registros
-        </span>
+        <div class="flex items-center gap-3">
+          <span id="totalRegistrosBadge" class="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-2.5 py-1 rounded-full">0 Registros</span>
+          <button onclick="imprimirBloco('blocoTabela')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
+            <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir
+          </button>
+        </div>
       </div>
 
       <div class="overflow-x-auto">
@@ -382,13 +314,11 @@
               <th class="px-4 py-3 text-center">Faturados</th>
               <th class="px-4 py-3 text-center">A Faturar</th>
               <th class="px-4 py-3 text-center">Fluxo Loja</th>
-              <th class="px-4 py-3 text-center">Leads</th>
+              <th class="px-4 py-3 text-center">Leads (BDC)</th>
               <th class="px-4 py-3 text-center">Agendamentos</th>
             </tr>
           </thead>
-          <tbody id="tabelaRespostas" class="divide-y divide-slate-800">
-            <!-- Inserido dinamicamente via JavaScript -->
-          </tbody>
+          <tbody id="tabelaRespostas" class="divide-y divide-slate-800"></tbody>
         </table>
       </div>
     </div>
@@ -435,12 +365,14 @@
           "Higor - João Pessoa (GAC)": { faturados: 9, aFaturar: 6, fluxoLoja: 35, leads: 22, agendamentos: 10, marca: "GAC" },
           "Renata - Natal (Mercedes-Benz)": { faturados: 2, aFaturar: 2, fluxoLoja: 12, leads: 10, agendamentos: 3, marca: "Mercedes-Benz" },
           "Anielly - Maceió (Mercedes-Benz)": { faturados: 2, aFaturar: 1, fluxoLoja: 10, leads: 8, agendamentos: 2, marca: "Mercedes-Benz" },
-          "Marcio - Maceió (STA Select)": { faturados: 2, aFaturar: 1, fluxoLoja: 5, leads: 7, agendamentos: 3, marca: "STA Select" }
+          "Marcio - Maceió (STA Select)": { faturados: 2, aFaturar: 1, fluxoLoja: 5, leads: 7, agendamentos: 3, marca: "STA Select" },
+          "Khelton - BDC & Digital": { faturados: 0, aFaturar: 0, fluxoLoja: 0, leads: 102, agendamentos: 45, marca: "BDC" }
         },
         registros: [
-          { hora: "24/10/2026 10:30", data: "24/10/2026", marca: "GAC", gestor: "Davys - Natal (GAC)", faturados: 2, aFaturar: 1, fluxoLoja: 8, leads: 5, agendamentos: 3 },
-          { hora: "24/10/2026 09:15", data: "24/10/2026", marca: "Mercedes-Benz", gestor: "Anielly - Maceió (Mercedes-Benz)", faturados: 1, aFaturar: 0, fluxoLoja: 3, leads: 2, agendamentos: 1 },
-          { hora: "24/10/2026 08:45", data: "24/10/2026", marca: "STA Select", gestor: "Marcio - Maceió (STA Select)", faturados: 1, aFaturar: 0, fluxoLoja: 2, leads: 3, agendamentos: 1 }
+          { hora: "2026-11-08 10:30", data: "2026-11-08", marca: "GAC", gestor: "Davys - Natal (GAC)", faturados: 2, aFaturar: 1, fluxoLoja: 8, leads: 5, agendamentos: 3 },
+          { hora: "2026-11-08 09:15", data: "2026-11-08", marca: "Mercedes-Benz", gestor: "Anielly - Maceió (Mercedes-Benz)", faturados: 1, aFaturar: 0, fluxoLoja: 3, leads: 2, agendamentos: 1 },
+          { hora: "2026-11-08 08:45", data: "2026-11-08", marca: "STA Select", gestor: "Marcio - Maceió (STA Select)", faturados: 1, aFaturar: 0, fluxoLoja: 2, leads: 3, agendamentos: 1 },
+          { hora: "2026-11-08 08:00", data: "2026-11-08", marca: "BDC", gestor: "Khelton - BDC & Digital", faturados: 0, aFaturar: 0, fluxoLoja: 0, leads: 15, agendamentos: 6 }
         ]
       };
       popularFiltroGestores(dadosBrutos.porGestor);
@@ -461,11 +393,18 @@
     function aplicarFiltros() {
       if (!dadosBrutos) return;
 
+      const dataSel = document.getElementById("filterData").value;
       const marcaSel = document.getElementById("filterMarca").value;
       const gestorSel = document.getElementById("filterGestor").value;
 
       let registrosFiltrados = dadosBrutos.registros || [];
 
+      if (dataSel) {
+        registrosFiltrados = registrosFiltrados.filter(r => {
+          const dataReg = (r.hora || r.data || "").split(" ")[0];
+          return dataReg === dataSel || (r.data && r.data === dataSel);
+        });
+      }
       if (marcaSel !== "TODAS") {
         registrosFiltrados = registrosFiltrados.filter(r => r.marca.toUpperCase().includes(marcaSel));
       }
@@ -484,11 +423,12 @@
         agend += Number(r.agendamentos) || 0;
 
         if (!gestoresAgrupados[r.gestor]) {
-          gestoresAgrupados[r.gestor] = { faturados: 0, aFaturar: 0, fluxo: 0, agendamentos: 0, marca: r.marca };
+          gestoresAgrupados[r.gestor] = { faturados: 0, aFaturar: 0, fluxo: 0, leads: 0, agendamentos: 0, marca: r.marca };
         }
         gestoresAgrupados[r.gestor].faturados += Number(r.faturados) || 0;
         gestoresAgrupados[r.gestor].aFaturar += Number(r.aFaturar) || 0;
         gestoresAgrupados[r.gestor].fluxo += Number(r.fluxoLoja) || 0;
+        gestoresAgrupados[r.gestor].leads += Number(r.leads) || 0;
         gestoresAgrupados[r.gestor].agendamentos += Number(r.agendamentos) || 0;
       });
 
@@ -499,12 +439,12 @@
       document.getElementById("kpiAgendamentos").innerText = agend;
       document.getElementById("totalRegistrosBadge").innerText = `${registrosFiltrados.length} Registros`;
 
-      atualizarMetasEProjecao(dadosBrutos.porGestor || {}, dadosBrutos.diasComRegistro || 1);
+      atualizarMetasEProjecao(dadosBrutos.porGestor || {}, dadosBrutos.diasComRegistro || 1, leads, agend);
       renderizarTabela(registrosFiltrados);
       renderizarGraficos(gestoresAgrupados, { fat, aFat, fluxo, leads, agend });
     }
 
-    function atualizarMetasEProjecao(porGestor, diasPercebidos) {
+    function atualizarMetasEProjecao(porGestor, diasPercebidos, totalLeadsBdc, totalAgendBdc) {
       let gacNatal = 0, gacMaceio = 0, gacJp = 0, gacCg = 0;
       let mbNatal = 0, mbMaceio = 0;
       let selectMarcio = 0;
@@ -529,43 +469,28 @@
       const totalMb = mbNatal + mbMaceio;
       const totalSelect = selectMarcio;
 
-      // ATUALIZAR METAS GAC (220)
+      document.getElementById("gacMetaVal").innerText = `${totalGac} / 220`;
       const pctGac = Math.min(100, Math.round((totalGac / 220) * 100));
-      document.getElementById("gacMetaPercent").innerText = `${pctGac}% (${totalGac} / 220)`;
       document.getElementById("gacMetaBar").style.width = `${pctGac}%`;
+      document.getElementById("gacNatalVal").innerText = `${gacNatal}/60`;
+      document.getElementById("gacMaceioVal").innerText = `${gacMaceio}/60`;
+      document.getElementById("gacJpVal").innerText = `${gacJp}/60`;
+      document.getElementById("gacCgVal").innerText = `${gacCg}/40`;
 
-      document.getElementById("gacNatalVal").innerText = `${gacNatal} / 60`;
-      document.getElementById("gacNatalPct").innerText = `${Math.round((gacNatal / 60) * 100)}%`;
-
-      document.getElementById("gacMaceioVal").innerText = `${gacMaceio} / 60`;
-      document.getElementById("gacMaceioPct").innerText = `${Math.round((gacMaceio / 60) * 100)}%`;
-
-      document.getElementById("gacJpVal").innerText = `${gacJp} / 60`;
-      document.getElementById("gacJpPct").innerText = `${Math.round((gacJp / 60) * 100)}%`;
-
-      document.getElementById("gacCgVal").innerText = `${gacCg} / 40`;
-      document.getElementById("gacCgPct").innerText = `${Math.round((gacCg / 40) * 100)}%`;
-
-      // ATUALIZAR METAS MERCEDES (16 - Renata 8, Anielly 8)
+      document.getElementById("mbMetaVal").innerText = `${totalMb} / 16`;
       const pctMb = Math.min(100, Math.round((totalMb / 16) * 100));
-      document.getElementById("mbMetaPercent").innerText = `${pctMb}% (${totalMb} / 16)`;
       document.getElementById("mbMetaBar").style.width = `${pctMb}%`;
+      document.getElementById("mbNatalVal").innerText = `${mbNatal}/8`;
+      document.getElementById("mbMaceioVal").innerText = `${mbMaceio}/8`;
 
-      document.getElementById("mbNatalVal").innerText = `${mbNatal} / 8`;
-      document.getElementById("mbNatalPct").innerText = `${Math.round((mbNatal / 8) * 100)}%`;
-
-      document.getElementById("mbMaceioVal").innerText = `${mbMaceio} / 8`;
-      document.getElementById("mbMaceioPct").innerText = `${Math.round((mbMaceio / 8) * 100)}%`;
-
-      // ATUALIZAR METAS STA SELECT (20 - Marcio)
+      document.getElementById("selectMetaVal").innerText = `${totalSelect} / 20`;
       const pctSelect = Math.min(100, Math.round((totalSelect / 20) * 100));
-      document.getElementById("selectMetaPercent").innerText = `${pctSelect}% (${totalSelect} / 20)`;
       document.getElementById("selectMetaBar").style.width = `${pctSelect}%`;
+      document.getElementById("selectMarcioVal").innerText = `${selectMarcio}/20`;
 
-      document.getElementById("selectMarcioVal").innerText = `${selectMarcio} / 20`;
-      document.getElementById("selectMarcioPct").innerText = `${Math.round((selectMarcio / 20) * 100)}%`;
+      document.getElementById("kheltonLeadsVal").innerText = totalLeadsBdc;
+      document.getElementById("kheltonAgendVal").innerText = totalAgendBdc;
 
-      // CÁLCULO DA PROJEÇÃO RUN RATE (3 FRENTES)
       const diasCorr = Math.max(1, diasPercebidos);
       const ritmoTotalDia = (totalGac + totalMb + totalSelect) / diasCorr;
       document.getElementById("ritmoDiarioVal").innerText = ritmoTotalDia.toFixed(1);
@@ -574,21 +499,17 @@
       const projMb = Math.round((totalMb / diasCorr) * 30);
       const projSelect = Math.round((totalSelect / diasCorr) * 30);
 
-      const pctProjGac = Math.round((projGac / 220) * 100);
-      const pctProjMb = Math.round((projMb / 16) * 100);
-      const pctProjSelect = Math.round((projSelect / 20) * 100);
-
       document.getElementById("projGacTotal").innerText = `${projGac} veículos`;
-      document.getElementById("projGacPct").innerText = `${pctProjGac}% da meta`;
-      document.getElementById("projGacBar").style.width = `${Math.min(100, pctProjGac)}%`;
+      document.getElementById("projGacPct").innerText = `${Math.round((projGac / 220) * 100)}%`;
+      document.getElementById("projGacBar").style.width = `${Math.min(100, Math.round((projGac / 220) * 100))}%`;
 
       document.getElementById("projMbTotal").innerText = `${projMb} veículos`;
-      document.getElementById("projMbPct").innerText = `${pctProjMb}% da meta`;
-      document.getElementById("projMbBar").style.width = `${Math.min(100, pctProjMb)}%`;
+      document.getElementById("projMbPct").innerText = `${Math.round((projMb / 16) * 100)}%`;
+      document.getElementById("projMbBar").style.width = `${Math.min(100, Math.round((projMb / 16) * 100))}%`;
 
       document.getElementById("projSelectTotal").innerText = `${projSelect} veículos`;
-      document.getElementById("projSelectPct").innerText = `${pctProjSelect}% da meta`;
-      document.getElementById("projSelectBar").style.width = `${Math.min(100, pctProjSelect)}%`;
+      document.getElementById("projSelectPct").innerText = `${Math.round((projSelect / 20) * 100)}%`;
+      document.getElementById("projSelectBar").style.width = `${Math.min(100, Math.round((projSelect / 20) * 100))}%`;
     }
 
     function renderizarTabela(registros) {
@@ -620,125 +541,72 @@
     function renderizarGraficos(gestoresAgrupados, totais) {
       const labels = Object.keys(gestoresAgrupados);
 
-      // GRÁFICO CONVERSÃO FLUXO X FATURADOS
+      // CONVERSÃO
       const ctxConversao = document.getElementById('chartConversao').getContext('2d');
       if (chartConversaoInstance) chartConversaoInstance.destroy();
-
-      const dataConversao = labels.map(g => {
-        const fl = gestoresAgrupados[g].fluxo;
-        const ft = gestoresAgrupados[g].faturados;
-        return fl > 0 ? ((ft / fl) * 100).toFixed(1) : 0;
-      });
-
       chartConversaoInstance = new Chart(ctxConversao, {
         type: 'bar',
         data: {
-          labels: labels,
+          labels,
           datasets: [{
-            label: 'Taxa de Conversão Salão (%)',
-            data: dataConversao,
+            data: labels.map(g => {
+              const fl = gestoresAgrupados[g].fluxo;
+              const ft = gestoresAgrupados[g].faturados;
+              return fl > 0 ? ((ft / fl) * 100).toFixed(1) : 0;
+            }),
             backgroundColor: '#10b981',
             borderRadius: 6
           }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            datalabels: {
-              color: '#fff',
-              font: { weight: 'bold', size: 11 },
-              formatter: v => v > 0 ? v + '%' : ''
-            }
-          },
-          scales: {
-            x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
-            y: { ticks: { color: '#94a3b8', callback: v => v + '%' }, grid: { color: '#334155' } }
-          }
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false }, datalabels: { color: '#fff', font: { weight: 'bold', size: 10 }, formatter: v => v > 0 ? v + '%' : '' } },
+          scales: { x: { ticks: { color: '#94a3b8' }, grid: { display: false } }, y: { ticks: { color: '#94a3b8', callback: v => v + '%' }, grid: { color: '#334155' } } }
         }
       });
 
-      // GRÁFICO PERFORMANCE BDC
+      // BDC
       const ctxBdc = document.getElementById('chartBdc').getContext('2d');
       if (chartBdcInstance) chartBdcInstance.destroy();
-
       chartBdcInstance = new Chart(ctxBdc, {
         type: 'bar',
         data: {
-          labels: labels,
+          labels,
           datasets: [
-            {
-              label: 'Agendamentos BDC',
-              data: labels.map(g => gestoresAgrupados[g].agendamentos),
-              backgroundColor: '#06b6d4',
-              borderRadius: 4
-            },
-            {
-              label: 'Fluxo no Salão',
-              data: labels.map(g => gestoresAgrupados[g].fluxo),
-              backgroundColor: '#a855f7',
-              borderRadius: 4
-            }
+            { label: 'Agendamentos', data: labels.map(g => gestoresAgrupados[g].agendamentos), backgroundColor: '#06b6d4', borderRadius: 4 },
+            { label: 'Fluxo no Salão', data: labels.map(g => gestoresAgrupados[g].fluxo), backgroundColor: '#a855f7', borderRadius: 4 }
           ]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { labels: { color: '#cbd5e1' } },
-            datalabels: {
-              color: '#fff',
-              font: { weight: 'bold', size: 10 },
-              formatter: v => v > 0 ? v : ''
-            }
-          },
-          scales: {
-            x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
-            y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
-          }
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#cbd5e1' } }, datalabels: { color: '#fff', font: { size: 9 }, formatter: v => v > 0 ? v : '' } },
+          scales: { x: { ticks: { color: '#94a3b8' }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } }
         }
       });
 
-      // GRÁFICO FATURADOS POR GESTOR (COM NUMERO DENTRO DA BARRA)
+      // GESTORES FATURADOS
       const ctxGestores = document.getElementById('chartGestores').getContext('2d');
       if (chartGestoresInstance) chartGestoresInstance.destroy();
-
       chartGestoresInstance = new Chart(ctxGestores, {
         type: 'bar',
         data: {
-          labels: labels,
+          labels,
           datasets: [{
-            label: 'Faturados',
             data: labels.map(g => gestoresAgrupados[g].faturados),
             backgroundColor: '#3b82f6',
             borderRadius: 6
           }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            datalabels: {
-              color: '#ffffff',
-              anchor: 'center',
-              align: 'center',
-              font: { weight: 'bold', size: 12 },
-              formatter: v => v > 0 ? v : ''
-            }
-          },
-          scales: {
-            x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
-            y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
-          }
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false }, datalabels: { color: '#fff', font: { weight: 'bold', size: 11 }, formatter: v => v > 0 ? v : '' } },
+          scales: { x: { ticks: { color: '#94a3b8' }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } }
         }
       });
 
-      // GRÁFICO DOUGHNUT PROPORÇÃO DO FUNIL (COM NUMEROS DENTRO DAS FATIAS)
+      // FUNIL
       const ctxFunil = document.getElementById('chartFunil').getContext('2d');
       if (chartFunilInstance) chartFunilInstance.destroy();
-
       chartFunilInstance = new Chart(ctxFunil, {
         type: 'doughnut',
         data: {
@@ -750,23 +618,27 @@
           }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
+          responsive: true, maintainAspectRatio: false,
           plugins: {
-            legend: {
-              position: 'bottom',
-              labels: { color: '#cbd5e1', font: { size: 11 } }
-            },
-            datalabels: {
-              color: '#ffffff',
-              font: { weight: 'bold', size: 12 },
-              formatter: (value, ctx) => {
-                return value > 0 ? value : '';
-              }
-            }
+            legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 10 } } },
+            datalabels: { color: '#fff', font: { weight: 'bold', size: 11 }, formatter: v => v > 0 ? v : '' }
           }
         }
       });
+    }
+
+    function imprimirBloco(idBloco) {
+      const conteudoOriginal = document.body.innerHTML;
+      const blocoHTML = document.getElementById(idBloco).outerHTML;
+      document.body.innerHTML = `
+        <div style="padding: 20px; font-family: sans-serif; background: #fff; color: #000;">
+          <h2 style="margin-bottom: 15px;">Relatório Executivo — STA Motors</h2>
+          ${blocoHTML}
+        </div>
+      `;
+      window.print();
+      document.body.innerHTML = conteudoOriginal;
+      location.reload();
     }
 
     carregarDados();
