@@ -20,12 +20,7 @@
       theme: {
         extend: {
           colors: {
-            brand: {
-              dark: '#0b1120',
-              card: '#1e293b',
-              accent: '#3b82f6',
-              border: '#334155'
-            }
+            brand: { dark: '#0b1120', card: '#1e293b', accent: '#3b82f6', border: '#334155' }
           }
         }
       }
@@ -44,44 +39,40 @@
   <!-- TOP HEADER -->
   <header class="bg-[#0f172a] border-b border-slate-800 px-6 py-4 sticky top-0 z-50 shadow-lg no-print">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      
       <div class="flex items-center gap-3">
         <div class="bg-blue-600/20 border border-blue-500/30 p-2 rounded-xl">
           <i data-lucide="layout-dashboard" class="w-6 h-6 text-blue-400"></i>
         </div>
         <div>
-          <h1 class="text-lg font-bold text-white tracking-wide">STA Motors — Painel Executivo de Vendas</h1>
-          <p class="text-xs text-slate-400">Gestão Consolidada de Operações, Metas, BDC e Leads em Tempo Real</p>
+          <h1 class="text-lg font-bold text-white tracking-wide">STA Motors — Painel Executivo de Vendas & Metas</h1>
+          <p class="text-xs text-slate-400">Visão Micro por Gestor e Consolidado Geral da Operação</p>
         </div>
       </div>
-
       <div class="flex items-center gap-3">
         <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="text-xs text-emerald-400 font-medium">Sistema Ao Vivo</span>
         </div>
       </div>
-
     </div>
   </header>
 
-  <!-- MAIN CONTENT CONTAINER -->
+  <!-- MAIN CONTAINER -->
   <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
 
     <!-- FILTERS BAR -->
     <div class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-md no-print">
       <div class="flex items-center gap-2 text-slate-300 font-medium text-sm">
         <i data-lucide="filter" class="w-4 h-4 text-blue-400"></i>
-        <span>Filtro Geral do Painel:</span>
+        <span>Filtro Geral:</span>
       </div>
       <div class="flex flex-wrap items-center gap-3">
         <div>
           <label for="filterData" class="sr-only">Data</label>
-          <input type="date" id="filterData" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+          <input type="date" id="filterData" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 outline-none">
         </div>
         <div>
-          <label for="filterMarca" class="sr-only">Marca</label>
-          <select id="filterMarca" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+          <select id="filterMarca" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 outline-none">
             <option value="TODAS">Todas as Marcas (GAC + Mercedes + Select + BDC)</option>
             <option value="GAC">GAC Motors</option>
             <option value="MERCEDES">Mercedes-Benz</option>
@@ -90,86 +81,84 @@
           </select>
         </div>
         <div>
-          <label for="filterGestor" class="sr-only">Gestor / Loja</label>
-          <select id="filterGestor" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none">
+          <select id="filterGestor" onchange="aplicarFiltros()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 outline-none">
             <option value="TODOS">Todos os Gestores/Lojas</option>
           </select>
         </div>
         <button onclick="carregarDados()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-2 rounded-lg flex items-center gap-1.5 transition-all shadow">
-          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-          Atualizar
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Atualizar
         </button>
       </div>
     </div>
 
-    <!-- METAS DE VENDAS -->
+    <!-- METAS COM COR DINÂMICA -->
     <div id="blocoMetas" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="target" class="w-5 h-5 text-blue-400"></i> Atingimento de Metas por Marca e Gestor
+          <i data-lucide="target" class="w-5 h-5 text-blue-400"></i> Atingimento de Metas (Com Indicador de Cor Dinâmico)
         </h2>
         <button onclick="imprimirBloco('blocoMetas')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
-          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir Bloco
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir
         </button>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- GAC -->
-        <div class="bg-slate-900/80 border border-blue-500/30 rounded-xl p-4">
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
           <div class="flex justify-between items-center mb-2">
             <span class="text-xs font-bold text-blue-400 uppercase">GAC Motors</span>
             <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">Meta: 220</span>
           </div>
           <div class="text-xl font-black text-white mb-2" id="gacMetaVal">0 / 220</div>
           <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3">
-            <div id="gacMetaBar" class="bg-blue-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
+            <div id="gacMetaBar" class="h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
           </div>
           <div class="space-y-1 text-[11px] text-slate-300">
-            <div class="flex justify-between"><span>Natal (Davys):</span> <strong id="gacNatalVal">0/60</strong></div>
-            <div class="flex justify-between"><span>Maceió (Willen):</span> <strong id="gacMaceioVal">0/60</strong></div>
-            <div class="flex justify-between"><span>João Pessoa (Higor):</span> <strong id="gacJpVal">0/60</strong></div>
+            <div class="flex justify-between"><span>Davys (Natal):</span> <strong id="gacNatalVal">0/60</strong></div>
+            <div class="flex justify-between"><span>Willen (Maceió):</span> <strong id="gacMaceioVal">0/60</strong></div>
+            <div class="flex justify-between"><span>Higor (João Pessoa):</span> <strong id="gacJpVal">0/60</strong></div>
             <div class="flex justify-between"><span>Campina Grande:</span> <strong id="gacCgVal">0/40</strong></div>
           </div>
         </div>
 
         <!-- MERCEDES -->
-        <div class="bg-slate-900/80 border border-emerald-500/30 rounded-xl p-4">
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
           <div class="flex justify-between items-center mb-2">
             <span class="text-xs font-bold text-emerald-400 uppercase">Mercedes-Benz</span>
             <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full">Meta: 16</span>
           </div>
           <div class="text-xl font-black text-white mb-2" id="mbMetaVal">0 / 16</div>
           <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3">
-            <div id="mbMetaBar" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
+            <div id="mbMetaBar" class="h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
           </div>
           <div class="space-y-1 text-[11px] text-slate-300">
-            <div class="flex justify-between"><span>Natal (Renata):</span> <strong id="mbNatalVal">0/8</strong></div>
-            <div class="flex justify-between"><span>Maceió (Anielly):</span> <strong id="mbMaceioVal">0/8</strong></div>
+            <div class="flex justify-between"><span>Renata (Natal):</span> <strong id="mbNatalVal">0/8</strong></div>
+            <div class="flex justify-between"><span>Anielly (Maceió):</span> <strong id="mbMaceioVal">0/8</strong></div>
           </div>
         </div>
 
         <!-- STA SELECT -->
-        <div class="bg-slate-900/80 border border-purple-500/30 rounded-xl p-4">
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
           <div class="flex justify-between items-center mb-2">
             <span class="text-xs font-bold text-purple-400 uppercase">STA Select</span>
             <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">Meta: 20</span>
           </div>
           <div class="text-xl font-black text-white mb-2" id="selectMetaVal">0 / 20</div>
           <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3">
-            <div id="selectMetaBar" class="bg-purple-500 h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
+            <div id="selectMetaBar" class="h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
           </div>
           <div class="space-y-1 text-[11px] text-slate-300">
-            <div class="flex justify-between"><span>Maceió (Marcio):</span> <strong id="selectMarcioVal">0/20</strong></div>
+            <div class="flex justify-between"><span>Marcio (Maceió):</span> <strong id="selectMarcioVal">0/20</strong></div>
           </div>
         </div>
 
-        <!-- BDC / KHELTON -->
-        <div class="bg-slate-900/80 border border-cyan-500/30 rounded-xl p-4">
+        <!-- BDC -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
           <div class="flex justify-between items-center mb-2">
-            <span class="text-xs font-bold text-cyan-400 uppercase">BDC / Operação</span>
-            <span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full">Gestor: Khelton</span>
+            <span class="text-xs font-bold text-cyan-400 uppercase">BDC & Digital</span>
+            <span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full">Khelton</span>
           </div>
-          <div class="text-xl font-black text-white mb-2" id="kheltonMetaVal">Ativo</div>
+          <div class="text-xl font-black text-white mb-2">Operação Ativa</div>
           <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800 mb-3">
             <div class="bg-cyan-500 h-2.5 rounded-full" style="width: 100%"></div>
           </div>
@@ -181,7 +170,7 @@
       </div>
     </div>
 
-    <!-- PROJEÇÃO DE VENDAS (RUN RATE) -->
+    <!-- PROJEÇÃO DE VENDAS -->
     <div id="blocoProjecao" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-700 pb-4 mb-4 gap-2">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
@@ -219,14 +208,14 @@
       </div>
     </div>
 
-    <!-- CARDS DE METRICAS CHAVE (KPIS) -->
+    <!-- INDICADORES OPERACIONAIS -->
     <div id="blocoKpis" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="bar-chart-3" class="w-5 h-5 text-cyan-400"></i> Indicadores Operacionais
+          <i data-lucide="bar-chart-3" class="w-5 h-5 text-cyan-400"></i> Indicadores Operacionais de Diretoria
         </h2>
         <button onclick="imprimirBloco('blocoKpis')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
-          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir Bloco
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir
         </button>
       </div>
 
@@ -244,7 +233,7 @@
         <div class="bg-slate-900/80 border border-purple-500/30 rounded-xl p-4">
           <span class="text-xs font-semibold text-purple-400 uppercase">Fluxo de Loja</span>
           <div id="kpiFluxoLoja" class="text-3xl font-black text-white mt-2">0</div>
-          <p class="text-[11px] text-slate-400 mt-1">Atendimentos no Salão</p>
+          <p class="text-[11px] text-slate-400 mt-1">Atendimentos Salão</p>
         </div>
         <div class="bg-slate-900/80 border border-amber-500/30 rounded-xl p-4">
           <span class="text-xs font-semibold text-amber-400 uppercase">Leads (Khelton BDC)</span>
@@ -259,32 +248,32 @@
       </div>
     </div>
 
-    <!-- GRÁFICOS OPERACIONAIS -->
+    <!-- GRÁFICOS VISÃO MICRO POR GESTOR -->
     <div id="blocoGraficos" class="bg-[#1e293b] border border-slate-700/60 rounded-xl p-6 shadow-lg relative print-block">
       <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-6">
         <h2 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="pie-chart" class="w-5 h-5 text-purple-400"></i> Gráficos e Análises Executivas
+          <i data-lucide="pie-chart" class="w-5 h-5 text-purple-400"></i> Gráficos Analíticos com Visão Micro por Gestor
         </h2>
         <button onclick="imprimirBloco('blocoGraficos')" class="no-print bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 border border-slate-700">
-          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir Bloco
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Imprimir
         </button>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
-          <h3 class="text-sm font-bold text-white mb-2">Conversão Salão (%)</h3>
+          <h3 class="text-sm font-bold text-white mb-2">Conversão Salão Individual por Gestor (%)</h3>
           <div class="relative h-64"><canvas id="chartConversao"></canvas></div>
         </div>
         <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
-          <h3 class="text-sm font-bold text-white mb-2">Eficácia BDC (Agendamentos vs Fluxo)</h3>
+          <h3 class="text-sm font-bold text-white mb-2">Eficácia BDC e Agendamentos por Gestor</h3>
           <div class="relative h-64"><canvas id="chartBdc"></canvas></div>
         </div>
         <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
-          <h3 class="text-sm font-bold text-white mb-2">Volume de Faturados por Gestor/Loja</h3>
+          <h3 class="text-sm font-bold text-white mb-2">Volume de Faturados Micro (Por Gestor)</h3>
           <div class="relative h-64"><canvas id="chartGestores"></canvas></div>
         </div>
         <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
-          <h3 class="text-sm font-bold text-white mb-2">Proporção da Operação Geral</h3>
+          <h3 class="text-sm font-bold text-white mb-2">Proporção Consolidada da Operação</h3>
           <div class="relative h-64 flex items-center justify-center"><canvas id="chartFunil"></canvas></div>
         </div>
       </div>
@@ -294,7 +283,7 @@
     <div id="blocoTabela" class="bg-[#1e293b] border border-slate-700/60 rounded-xl shadow-lg overflow-hidden print-block">
       <div class="p-5 border-b border-slate-800 flex items-center justify-between">
         <h2 class="text-sm font-bold text-white flex items-center gap-2">
-          <i data-lucide="list" class="w-4 h-4 text-purple-400"></i> Histórico de Lançamentos
+          <i data-lucide="list" class="w-4 h-4 text-purple-400"></i> Histórico Consolidado e por Gestor
         </h2>
         <div class="flex items-center gap-3">
           <span id="totalRegistrosBadge" class="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-2.5 py-1 rounded-full">0 Registros</span>
@@ -314,7 +303,7 @@
               <th class="px-4 py-3 text-center">Faturados</th>
               <th class="px-4 py-3 text-center">A Faturar</th>
               <th class="px-4 py-3 text-center">Fluxo Loja</th>
-              <th class="px-4 py-3 text-center">Leads (BDC)</th>
+              <th class="px-4 py-3 text-center">Leads (Khelton)</th>
               <th class="px-4 py-3 text-center">Agendamentos</th>
             </tr>
           </thead>
@@ -350,7 +339,7 @@
           carregarDadosFallback();
         }
       } catch (err) {
-        console.warn("Utilizando modo de contingência visual:", err);
+        console.warn("Modo contingência visual:", err);
         carregarDadosFallback();
       }
     }
@@ -415,6 +404,16 @@
       let fat = 0, aFat = 0, fluxo = 0, leads = 0, agend = 0;
       let gestoresAgrupados = {};
 
+      // Garantir que todos os gestores apareçam na visão micro mesmo com zero filtrado
+      const listaGestoresPadrao = [
+        "Davys - Natal (GAC)", "Willen - Maceió (GAC)", "Higor - João Pessoa (GAC)", 
+        "Renata - Natal (Mercedes-Benz)", "Anielly - Maceió (Mercedes-Benz)", 
+        "Marcio - Maceió (STA Select)", "Khelton - BDC & Digital"
+      ];
+      listaGestoresPadrao.forEach(g => {
+        gestoresAgrupados[g] = { faturados: 0, aFaturar: 0, fluxo: 0, leads: 0, agendamentos: 0 };
+      });
+
       registrosFiltrados.forEach(r => {
         fat += Number(r.faturados) || 0;
         aFat += Number(r.aFaturar) || 0;
@@ -423,7 +422,7 @@
         agend += Number(r.agendamentos) || 0;
 
         if (!gestoresAgrupados[r.gestor]) {
-          gestoresAgrupados[r.gestor] = { faturados: 0, aFaturar: 0, fluxo: 0, leads: 0, agendamentos: 0, marca: r.marca };
+          gestoresAgrupados[r.gestor] = { faturados: 0, aFaturar: 0, fluxo: 0, leads: 0, agendamentos: 0 };
         }
         gestoresAgrupados[r.gestor].faturados += Number(r.faturados) || 0;
         gestoresAgrupados[r.gestor].aFaturar += Number(r.aFaturar) || 0;
@@ -442,6 +441,13 @@
       atualizarMetasEProjecao(dadosBrutos.porGestor || {}, dadosBrutos.diasComRegistro || 1, leads, agend);
       renderizarTabela(registrosFiltrados);
       renderizarGraficos(gestoresAgrupados, { fat, aFat, fluxo, leads, agend });
+    }
+
+    // Função auxiliar para cor dinâmica da barra de progresso (Vermelho/Ámbar -> Azul -> Verde)
+    function obterCorDinamicaMeta(percentual) {
+      if (percentual < 35) return 'bg-amber-500';
+      if (percentual < 75) return 'bg-blue-500';
+      return 'bg-emerald-500';
     }
 
     function atualizarMetasEProjecao(porGestor, diasPercebidos, totalLeadsBdc, totalAgendBdc) {
@@ -469,23 +475,32 @@
       const totalMb = mbNatal + mbMaceio;
       const totalSelect = selectMarcio;
 
+      // GAC
       document.getElementById("gacMetaVal").innerText = `${totalGac} / 220`;
       const pctGac = Math.min(100, Math.round((totalGac / 220) * 100));
-      document.getElementById("gacMetaBar").style.width = `${pctGac}%`;
+      const barGac = document.getElementById("gacMetaBar");
+      barGac.style.width = `${pctGac}%`;
+      barGac.className = `h-2.5 rounded-full transition-all duration-1000 ${obterCorDinamicaMeta(pctGac)}`;
       document.getElementById("gacNatalVal").innerText = `${gacNatal}/60`;
       document.getElementById("gacMaceioVal").innerText = `${gacMaceio}/60`;
       document.getElementById("gacJpVal").innerText = `${gacJp}/60`;
       document.getElementById("gacCgVal").innerText = `${gacCg}/40`;
 
+      // MERCEDES
       document.getElementById("mbMetaVal").innerText = `${totalMb} / 16`;
       const pctMb = Math.min(100, Math.round((totalMb / 16) * 100));
-      document.getElementById("mbMetaBar").style.width = `${pctMb}%`;
+      const barMb = document.getElementById("mbMetaBar");
+      barMb.style.width = `${pctMb}%`;
+      barMb.className = `h-2.5 rounded-full transition-all duration-1000 ${obterCorDinamicaMeta(pctMb)}`;
       document.getElementById("mbNatalVal").innerText = `${mbNatal}/8`;
       document.getElementById("mbMaceioVal").innerText = `${mbMaceio}/8`;
 
+      // STA SELECT
       document.getElementById("selectMetaVal").innerText = `${totalSelect} / 20`;
       const pctSelect = Math.min(100, Math.round((totalSelect / 20) * 100));
-      document.getElementById("selectMetaBar").style.width = `${pctSelect}%`;
+      const barSelect = document.getElementById("selectMetaBar");
+      barSelect.style.width = `${pctSelect}%`;
+      barSelect.className = `h-2.5 rounded-full transition-all duration-1000 ${obterCorDinamicaMeta(pctSelect)}`;
       document.getElementById("selectMarcioVal").innerText = `${selectMarcio}/20`;
 
       document.getElementById("kheltonLeadsVal").innerText = totalLeadsBdc;
@@ -539,17 +554,19 @@
     }
 
     function renderizarGraficos(gestoresAgrupados, totais) {
-      const labels = Object.keys(gestoresAgrupados);
+      // Labels limpos com os primeiros nomes dos gestores para a visão micro clara
+      const labelsCompletos = Object.keys(gestoresAgrupados);
+      const labelsCurtos = labelsCompletos.map(g => g.split(" - ")[0]);
 
-      // CONVERSÃO
+      // 1. CONVERSÃO MICRO POR GESTOR
       const ctxConversao = document.getElementById('chartConversao').getContext('2d');
       if (chartConversaoInstance) chartConversaoInstance.destroy();
       chartConversaoInstance = new Chart(ctxConversao, {
         type: 'bar',
         data: {
-          labels,
+          labels: labelsCurtos,
           datasets: [{
-            data: labels.map(g => {
+            data: labelsCompletos.map(g => {
               const fl = gestoresAgrupados[g].fluxo;
               const ft = gestoresAgrupados[g].faturados;
               return fl > 0 ? ((ft / fl) * 100).toFixed(1) : 0;
@@ -561,38 +578,38 @@
         options: {
           responsive: true, maintainAspectRatio: false,
           plugins: { legend: { display: false }, datalabels: { color: '#fff', font: { weight: 'bold', size: 10 }, formatter: v => v > 0 ? v + '%' : '' } },
-          scales: { x: { ticks: { color: '#94a3b8' }, grid: { display: false } }, y: { ticks: { color: '#94a3b8', callback: v => v + '%' }, grid: { color: '#334155' } } }
+          scales: { x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8', callback: v => v + '%' }, grid: { color: '#334155' } } }
         }
       });
 
-      // BDC
+      // 2. BDC MICRO POR GESTOR
       const ctxBdc = document.getElementById('chartBdc').getContext('2d');
       if (chartBdcInstance) chartBdcInstance.destroy();
       chartBdcInstance = new Chart(ctxBdc, {
         type: 'bar',
         data: {
-          labels,
+          labels: labelsCurtos,
           datasets: [
-            { label: 'Agendamentos', data: labels.map(g => gestoresAgrupados[g].agendamentos), backgroundColor: '#06b6d4', borderRadius: 4 },
-            { label: 'Fluxo no Salão', data: labels.map(g => gestoresAgrupados[g].fluxo), backgroundColor: '#a855f7', borderRadius: 4 }
+            { label: 'Agendamentos', data: labelsCompletos.map(g => gestoresAgrupados[g].agendamentos), backgroundColor: '#06b6d4', borderRadius: 4 },
+            { label: 'Fluxo no Salão', data: labelsCompletos.map(g => gestoresAgrupados[g].fluxo), backgroundColor: '#a855f7', borderRadius: 4 }
           ]
         },
         options: {
           responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { labels: { color: '#cbd5e1' } }, datalabels: { color: '#fff', font: { size: 9 }, formatter: v => v > 0 ? v : '' } },
-          scales: { x: { ticks: { color: '#94a3b8' }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } }
+          plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 10 } } }, datalabels: { color: '#fff', font: { size: 9 }, formatter: v => v > 0 ? v : '' } },
+          scales: { x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } }
         }
       });
 
-      // GESTORES FATURADOS
+      // 3. FATURADOS MICRO POR GESTOR
       const ctxGestores = document.getElementById('chartGestores').getContext('2d');
       if (chartGestoresInstance) chartGestoresInstance.destroy();
       chartGestoresInstance = new Chart(ctxGestores, {
         type: 'bar',
         data: {
-          labels,
+          labels: labelsCurtos,
           datasets: [{
-            data: labels.map(g => gestoresAgrupados[g].faturados),
+            data: labelsCompletos.map(g => gestoresAgrupados[g].faturados),
             backgroundColor: '#3b82f6',
             borderRadius: 6
           }]
@@ -600,11 +617,11 @@
         options: {
           responsive: true, maintainAspectRatio: false,
           plugins: { legend: { display: false }, datalabels: { color: '#fff', font: { weight: 'bold', size: 11 }, formatter: v => v > 0 ? v : '' } },
-          scales: { x: { ticks: { color: '#94a3b8' }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } }
+          scales: { x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } } }
         }
       });
 
-      // FUNIL
+      // 4. FUNIL CONSOLIDADO
       const ctxFunil = document.getElementById('chartFunil').getContext('2d');
       if (chartFunilInstance) chartFunilInstance.destroy();
       chartFunilInstance = new Chart(ctxFunil, {
