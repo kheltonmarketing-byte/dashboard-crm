@@ -331,10 +331,13 @@
 
       let registrosFiltrados = dadosBrutos.registros || [];
 
-      // Filtra registros indesejados onde o gestor veio como "NATAL" isolado ou vazio
-      registrosFiltrados = registrosFiltrados.filter(r => {
+      // Ajuste inteligente: se o gestor vier como "NATAL", tratamos como Khelton / Operação BDC ou ajustamos a exibição sem sumir com a linha
+      registrosFiltrados = registrosFiltrados.map(r => {
         const gName = (r.gestor || "").trim().toUpperCase();
-        return gName !== "" && gName !== "NATAL";
+        if (gName === "NATAL" || gName === "") {
+          return { ...r, gestor: "Khelton - BDC & Digital" };
+        }
+        return r;
       });
 
       if (dataSel) {
@@ -364,7 +367,7 @@
       if (dadosBrutos.porGestor) {
         Object.keys(dadosBrutos.porGestor).forEach(g => {
           const gUpper = g.trim().toUpperCase();
-          if (gUpper === "" || gUpper === "NATAL") return; // Ignora lixo de "NATAL" isolado nos gestores de showroom
+          if (gUpper === "" || gUpper === "NATAL") return; 
 
           if (!gestoresAgrupados[g]) {
             gestoresAgrupados[g] = { faturados: 0, aFaturar: 0, fluxo: 0 };
